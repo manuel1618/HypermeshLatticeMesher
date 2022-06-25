@@ -13,9 +13,9 @@ class Node:
         xyz coordinates
     """
 
-    nodes = []
+    nodes = dict()
 
     def __init__(self, id: int, xyz: tuple) -> None:
-        Node.nodes.append(self)
+        Node.nodes[id] = self
         self.id = id
         self.xyz = xyz

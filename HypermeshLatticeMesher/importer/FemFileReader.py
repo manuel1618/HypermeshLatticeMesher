@@ -1,11 +1,11 @@
 import math
+from HypermeshLatticeMesher.datastructure.Node import Node
+from HypermeshLatticeMesher.datastructure.Element import Element
 from typing import List
 
 
 class FEMFileReader:
-    """
-   
-    """
+    """ """
 
     def __init__(self, path_to_file: str) -> None:
         """
@@ -20,36 +20,57 @@ class FEMFileReader:
             for line in file.readlines():
                 self.lines.append(line)
 
-    def read_nodes(self):
-        # # sampleline: "         12-6.49596E-06-2.57354E-05 3.00000E+00-4.00000E+00-5.00000E+00-6.00000E+00"
-        # line: str = ""
-        # loadstep_name = ""  # not used currently
+        self.read_nodes()
+        self.read_elements()
 
-        # for line in self.lines:
-        #     if "DISP:" in line:
-        #         loadstep_name = line.split(" ")[-1]  # not used currently
-        #     # check if its a displacement string
-        #     if line.count("E") == 6:
-        #         line = line.strip()
-        #         id = int(line[0: -(6*12)])
-        #         trans_x = float(line[-(6*12): -(5*12)])
-        #         trans_y = float(line[-(5*12): -(4*12)])
-        #         trans_z = float(line[-(4*12): -(3*12)])
-        #         rot_x = float(line[-(3*12): -(2*12)])
-        #         rot_y = float(line[-(2*12): -(1*12)])
-        #         rot_z = float(line[-12: len(line)])
-        #         total_translation = math.sqrt(
-        #             math.pow(trans_x, 2)+math.pow(trans_y, 2)+math.pow(trans_z, 2))
-        #         self.nodes2diplacements[id] = total_translation
-        pass
+    def read_nodes(self):
+        # sampleline: "GRID,1,,-10.313008308411,-7.0365853309631,-45.275356292725,"
+        for i in range(0, len(self.lines)):
+            line = self.lines[i]
+            if "," in line:
+                lineSplit = line.split(",")
+                if lineSplit[0] == "GRID":
+                    id = lineSplit[1]
+                    x = float(lineSplit[3])
+                    y = float(lineSplit[4])
+                    z = float(lineSplit[5])
+                    Node(id, (x, y, z))
 
     def read_elements(self):
         """
-        Scans through the dict and returns the maximum id and displacement value (total)
+        Reads in all elements in the .fem File
         """
-        pass
+        # sampleline: "CHEXA,31,0,25,28,23,24,45,46, <new line> +,47,48,
+        for i in range(0, len(self.lines)):
+            line = self.lines[i]
+
+            if "," in line:
+                lineSplit = line.split(",")
+                if lineSplit[0] == "CHEXA":
+                    id = int(lineSplit[1])
+                    config = lineSplit[0]
+                    nodes = []
+                    for j in range(3, len(lineSplit) - 1):
+                        nodes.append(int(lineSplit[j]))
+                    while self.lines[i + 1][0] == "+":
+                        i += 1
+                        line = self.lines[i]
+                        lineSplit = line.split(",")
+                        for j in range(1, len(lineSplit) - 1):
+                            nodes.append(int(lineSplit[j]))
+
+                    Element(id, config, nodes)
 
 
 if __name__ == "__main__":
+
+    """
+    Local Testing only
+    """
     reader = FEMFileReader(
-        r"D:\GITHUB\HypermeshLatticeMesher\.git\HypermeshLatticeMesher\HypermeshLatticeMesher\data\femFiles\smallModel.fem")
+        r"D:\GITHUB\HypermeshLatticeMesher\.git\HypermeshLatticeMesher\HypermeshLatticeMesher\data\femFiles\smallModel.fem"
+    )
+
+    print(len(Node.nodes))
+    print(len(Element.elements))
+    print(len(Element.elements.get(33).nodes))
