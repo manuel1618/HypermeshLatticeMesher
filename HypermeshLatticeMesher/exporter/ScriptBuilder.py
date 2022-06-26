@@ -31,6 +31,8 @@ class ScriptBuilder:
             z = node.xyz[2]
             self.tcl_commands.append(f"*createnode {x} {y} {z} 0 0 0")
 
+        print("Nodes written")
+
     def write_tcl_create_Material_Property_Component(self):
         """
         Creates all the basic components - very simmple implementation for now
@@ -89,8 +91,10 @@ class ScriptBuilder:
         self.tcl_commands.append("*elementtype 61 1")
         realized_connections = [Tuple]
         element: Element = None
+        i = 1
         for element in Element.elements.values():
-            connections = element.get_Lattice_Connections(Connection_Type["FULL"])
+            print(f"{i} of {len(list(Element.elements.values()))} written")
+            connections = element.get_Lattice_Connections(Connection_Type["SIMPLE"])
             for connection in connections:
                 if connection not in realized_connections:
                     node1 = connection[0]
@@ -99,6 +103,9 @@ class ScriptBuilder:
                     realized_connections.append((node2, node1))
 
                     self.tcl_commands.append(f'*rod {node1} {node2} "property_{1}"')
+            i += 1
+
+        print("Rods written")
 
     def write_tcl_save_model_and_close(self, path_to_model_file: str):
         """

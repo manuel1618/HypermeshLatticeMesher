@@ -37,6 +37,7 @@ class FEMFileReader:
                     y = float(lineSplit[4])
                     z = float(lineSplit[5])
                     Node(id, (x, y, z))
+        print("Nodes loaded")
 
     def read_elements(self):
         """
@@ -64,6 +65,8 @@ class FEMFileReader:
                             break
 
                     Element(id, config, nodes)
+
+        print("Elements loaded")
 
 
 if __name__ == "__main__":

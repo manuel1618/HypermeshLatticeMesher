@@ -14,6 +14,7 @@ class HypermeshLatticeMesher:
         )
 
         FEMFileReader(self.path_fem_file)
+
         scriptbuilder = ScriptBuilder()
         scriptbuilder.write_tcl_create_Material_Property_Component()
         scriptbuilder.write_tcl_create_nodes()
@@ -35,6 +36,6 @@ if __name__ == "__main__":
 
     path_fem_file = (
         os.getcwd().replace("\\", "/")
-        + "/HypermeshLatticeMesher/data/femFiles/smallModel.fem"
+        + "/HypermeshLatticeMesher/data/femFiles/sphereVoxels1stOrder.fem"
     )
     HypermeshLatticeMesher(path_fem_file)
