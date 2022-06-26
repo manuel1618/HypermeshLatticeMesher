@@ -8,6 +8,11 @@ Currently implemented: Hex8 elements, Hex20 is somewhat done but not fully (26.0
 ![grafik](https://user-images.githubusercontent.com/9959248/175821413-6ec8eb64-ae47-4e76-8399-81c49f231f12.png)
 
 
+When exporting .fem files, make sure, you use the free format and don't remove the E from real values:
+
+![grafik](https://user-images.githubusercontent.com/9959248/175821529-212807c2-0260-49d6-9094-f87b30b76a51.png)
+
+
 
 ## Notes (for coding)
 
