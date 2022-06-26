@@ -1,5 +1,4 @@
-import os
-from typing import List, Tuple
+from typing import Tuple
 
 from HypermeshLatticeMesher.exporter.HyperWorksStarter import HyperWorksStarter
 from HypermeshLatticeMesher.datastructure.Node import Node
@@ -7,12 +6,25 @@ from HypermeshLatticeMesher.datastructure.Element import Element, Connection_Typ
 
 
 class ScriptBuilder:
+    """
+    Script building class (tcl) for hypermesh
+
+    Parameters:
+    ---------
+    tcl_commands : List[str]
+        List of all tcl commands to be executed
+
+    """
+
     tcl_commands = []
 
     def __init__(self):
         self.tcl_commands = HyperWorksStarter.initialize_tcl_commands()
 
     def write_tcl_create_nodes(self):
+        """
+        Creates the nodes with their coordinates
+        """
         for node in Node.nodes.values():
             x = node.xyz[0]
             y = node.xyz[1]
@@ -20,6 +32,9 @@ class ScriptBuilder:
             self.tcl_commands.append(f"*createnode {x} {y} {z} 0 0 0")
 
     def write_tcl_create_Material_Property_Component(self):
+        """
+        Creates all the basic components - very simmple implementation for now
+        """
 
         material_name = "Material1"
         diameter = 0.2
@@ -66,6 +81,9 @@ class ScriptBuilder:
         self.tcl_commands.append('*mergehistorystate "" ""')
 
     def write_tcl_create_rods(self):
+        """
+        Creates all the rods. Property should have been set. Simple implementation with all rods in one component / property / beamsection / material
+        """
 
         self.tcl_commands.append("*setoption topofacecolor=4")
         self.tcl_commands.append("*elementtype 61 1")
@@ -81,3 +99,13 @@ class ScriptBuilder:
                     realized_connections.append((node2, node1))
 
                     self.tcl_commands.append(f'*rod {node1} {node2} "property_{1}"')
+
+    def write_tcl_save_model_and_close(self, path_to_model_file: str):
+        """
+        Saves the model to a .hm file
+        """
+        path_to_model_file = path_to_model_file.replace("\\", "/")
+        self.tcl_commands.append("hm_answernext yes")
+        self.tcl_commands.append(f"*writefile {path_to_model_file} 1")
+        self.tcl_commands.append("*quit 1")  # for non batch
+        self.tcl_commands.append("exit")  # batch

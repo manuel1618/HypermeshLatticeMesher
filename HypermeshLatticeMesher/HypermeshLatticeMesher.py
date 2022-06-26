@@ -18,13 +18,23 @@ class HypermeshLatticeMesher:
         scriptbuilder.write_tcl_create_Material_Property_Component()
         scriptbuilder.write_tcl_create_nodes()
         scriptbuilder.write_tcl_create_rods()
+        scriptbuilder.write_tcl_save_model_and_close(
+            self.path_tcl_Directory + "/model1.hm"
+        )
+
         hyperworksStarter = HyperWorksStarter(self.path_tcl_Directory, "model1")
         hyperworksStarter.write_script(
             scriptbuilder.tcl_commands, self.path_tcl_Directory, False, ""
         )
 
+        # Run Hypermesh in batch to save time
+        hyperworksStarter.runHyperMesh(True, False)
+
 
 if __name__ == "__main__":
-    HypermeshLatticeMesher(
-        r"D:\GITHUB\HypermeshLatticeMesher\.git\HypermeshLatticeMesher\HypermeshLatticeMesher\data\femFiles\smallModel.fem"
+
+    path_fem_file = (
+        os.getcwd().replace("\\", "/")
+        + "/HypermeshLatticeMesher/data/femFiles/smallModel.fem"
     )
+    HypermeshLatticeMesher(path_fem_file)

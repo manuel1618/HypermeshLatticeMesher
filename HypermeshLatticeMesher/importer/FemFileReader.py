@@ -1,22 +1,21 @@
-import math
+import os
 from HypermeshLatticeMesher.datastructure.Node import Node
 from HypermeshLatticeMesher.datastructure.Element import Element
-from typing import List
 
 
 class FEMFileReader:
-    """ """
+    """
+    Class for importing data from a .fem file and creating datastructure entities to be used later on
+
+    Parameters:
+    ---------
+    path_to_file : str
+        Path to the .fem file which should be read
+    """
 
     def __init__(self, path_to_file: str) -> None:
-        """
-        initialize the reader and take the lines
-        Parameters:
-        ---------
-        path_to_file:str
-          This points to the .disp file which is read
-        """
         self.lines = []
-        with open(path_to_file) as file:
+        with open(path_to_file, "r") as file:
             for line in file.readlines():
                 self.lines.append(line)
 
@@ -24,13 +23,16 @@ class FEMFileReader:
         self.read_elements()
 
     def read_nodes(self):
+        """
+        Reads and creates all the Nodes from the .fem file in the datastructure
+        """
         # sampleline: "GRID,1,,-10.313008308411,-7.0365853309631,-45.275356292725,"
         for i in range(0, len(self.lines)):
             line = self.lines[i]
             if "," in line:
                 lineSplit = line.split(",")
                 if lineSplit[0] == "GRID":
-                    id = lineSplit[1]
+                    id = int(lineSplit[1])
                     x = float(lineSplit[3])
                     y = float(lineSplit[4])
                     z = float(lineSplit[5])
@@ -38,7 +40,7 @@ class FEMFileReader:
 
     def read_elements(self):
         """
-        Reads in all elements in the .fem File
+        Reads and creates all elements from the .fem File in the datastructure
         """
         # sampleline: "CHEXA,31,0,25,28,23,24,45,46, <new line> +,47,48,
         for i in range(0, len(self.lines)):
@@ -58,6 +60,8 @@ class FEMFileReader:
                         lineSplit = line.split(",")
                         for j in range(1, len(lineSplit) - 1):
                             nodes.append(int(lineSplit[j]))
+                        if i == len(self.lines) - 1:  # eof fix
+                            break
 
                     Element(id, config, nodes)
 
@@ -67,10 +71,12 @@ if __name__ == "__main__":
     """
     Local Testing only
     """
-    reader = FEMFileReader(
-        r"D:\GITHUB\HypermeshLatticeMesher\.git\HypermeshLatticeMesher\HypermeshLatticeMesher\data\femFiles\smallModel.fem"
+    path_fem_file = (
+        os.getcwd().replace("\\", "/")
+        + "/HypermeshLatticeMesher/data/femFiles/smallModel2ndOrder.fem"
     )
+    reader = FEMFileReader(path_fem_file)
 
     print(len(Node.nodes))
     print(len(Element.elements))
-    print(len(Element.elements.get(33).nodes))
+    print(len(list(Element.elements.values())[0].nodes))

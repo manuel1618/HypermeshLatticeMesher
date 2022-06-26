@@ -8,10 +8,13 @@ import psutil
 class HyperWorksStarter:
     """
     Hypermesh Starter Class (Windows only currently)
+    version should be above 2021 - else: check paths!
     """
 
     # Change this according to your system
-    ALTAIR_VERSION = "2021.2"
+    ALTAIR_VERSION = "2022"  # user input
+
+    # File paths
     OPTISTRUCT_PROCESS_NAME = f"optistruct_{ALTAIR_VERSION}_win64.exe"
     ALTAIR_HOME = os.environ["ProgramFiles"] + f"\\Altair\\{ALTAIR_VERSION}"
     ALTAIR_HOME = ALTAIR_HOME.replace("\\", "/")
@@ -43,10 +46,6 @@ class HyperWorksStarter:
         # Hide Output of the shell - relax!
         startupinfo = subprocess.STARTUPINFO()
         startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
-        # if (hidden):
-        # startupinfo.wShowWindow = subprocess.SW_HIDE
-
-        # print(script_path)
         if batch:
             process = subprocess.Popen(
                 [
@@ -62,21 +61,25 @@ class HyperWorksStarter:
                 [self.PATH_HYPERMESH, "-tcl", self.script_path], startupinfo=startupinfo
             )
 
-        if wait:
-            print("Waiting for Hypermesh Process to Finish")
-            process.wait()
+        print("Waiting for Hypermesh Process to Finish")
+        process.wait()
         # batch needs special attention:
         if batch:
-            if checkIfProcessRunning("hmbatch.exe"):
+            while checkIfProcessRunning("hmbatch.exe"):
                 print("Waiting for Hypermesh (hmbatch) Process to Finish")
                 time.sleep(1)
-        # in case of a run
+        else:
+            while checkIfProcessRunning("hmopengl.exe"):
+                print("Waiting for Hypermesh (hmopengl) Process to Finish")
+                time.sleep(1)
+
+        # Wait in case of a run
         if wait:
-            if checkIfProcessRunning(self.OPTISTRUCT_PROCESS_NAME):
+            while checkIfProcessRunning(self.OPTISTRUCT_PROCESS_NAME):
                 print("Waiting for Optistruct Process to Finish")
                 time.sleep(1)
 
-        print("Finished Altair Run")
+            print("Finished Altair Run")
 
     def runHyperview(self, batch=False, wait=False):
         """
@@ -111,7 +114,7 @@ class HyperWorksStarter:
                 print("Waiting for Hyperview (hw.exe) Process to Finish")
                 time.sleep(1)
 
-        print("Finished Hyperview Run")
+            print("Finished Hyperview Run")
 
     def add_export_and_run_options(self, fem_path: str, user_param: str):
         """
