@@ -3,6 +3,7 @@ from typing import List
 import os
 import glob
 import psutil
+from pathlib import Path
 
 
 class HyperWorksStarter:
@@ -23,6 +24,10 @@ class HyperWorksStarter:
 
     def __init__(self, working_dir: str, model_name_no_ext: str) -> None:
         self.working_dir = working_dir.replace("\\", "/")
+
+        # create working dir if it does not exist
+        Path(self.working_dir).mkdir(parents=True, exist_ok=True)
+
         self.model_name = model_name_no_ext
         self.script_path = self.working_dir + "/" + self.model_name + ".tcl"
         self.script_path = self.script_path.replace("\\", "/")

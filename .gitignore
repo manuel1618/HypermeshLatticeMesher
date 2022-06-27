@@ -1,4 +1,6 @@
 /HypermeshLatticeMesher/exporter/TCLScript/*
+!/HypermeshLatticeMesher/exporter/TCLScript/.gitkeep
+*.tcl
 
 
 # Byte-compiled / optimized / DLL files
