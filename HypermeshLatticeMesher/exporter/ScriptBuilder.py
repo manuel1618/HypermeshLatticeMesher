@@ -94,7 +94,7 @@ class ScriptBuilder:
         i = 1
         for element in Element.elements.values():
             print(f"{i} of {len(list(Element.elements.values()))} written")
-            connections = element.get_Lattice_Connections(Connection_Type["SIMPLE"])
+            connections = element.get_Lattice_Connections(Connection_Type["FULL"])
             for connection in connections:
                 if connection not in realized_connections:
                     node1 = connection[0]

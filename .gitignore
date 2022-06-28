@@ -1,5 +1,9 @@
 /HypermeshLatticeMesher/exporter/TCLScript/*
 !/HypermeshLatticeMesher/exporter/TCLScript/.gitkeep
+/HypermeshLatticeMesher/exporter/hypermesh/*
+!/HypermeshLatticeMesher/exporter/hypermesh/.gitkeep
+/HypermeshLatticeMesher/data/hyperview/*
+!/HypermeshLatticeMesher/data/hyperview/.gitkeep
 *.tcl
 
 
