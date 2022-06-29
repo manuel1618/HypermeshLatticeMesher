@@ -37,6 +37,19 @@ class Test_FEMFileReader(unittest.TestCase):
     """
     ).strip()
 
+    DATA_ELEMENT_TET4 = dedent(
+        """
+        CTETRA,1,0,1,2,3,4,
+        """
+    ).strip()
+
+    DATA_ELEMENT_TET10 = dedent(
+        """
+        CTETRA,1,0,1,2,3,4,5,6,
+        +,7,8,9,10,
+        """
+    ).strip()
+
     @patch("builtins.open", mock_open(read_data=DATA_NODES))
     def test_read_nodes(self):
         """
@@ -114,4 +127,39 @@ class Test_FEMFileReader(unittest.TestCase):
                 443,
                 435,
             ],
+        )
+
+    @patch("builtins.open", mock_open(read_data=DATA_ELEMENT_TET4))
+    def test_read_elements_hex20(self):
+        Element.reset()
+        self.assertEqual(len(list(Element.elements.values())), 0)
+        FEMFileReader("")
+        self.assertEqual(len(list(Element.elements.values())), 1)
+        element = list(Element.elements.values())[0]
+        self.assertEqual(element.id, 1)
+        self.assertEqual(element.config, "CTETRA")
+        self.assertEqual(len(element.nodes), 4)
+        self.assertEqual(
+            element.nodes,
+            [
+                1,
+                2,
+                3,
+                4,
+            ],
+        )
+
+    @patch("builtins.open", mock_open(read_data=DATA_ELEMENT_TET10))
+    def test_read_elements_hex20(self):
+        Element.reset()
+        self.assertEqual(len(list(Element.elements.values())), 0)
+        FEMFileReader("")
+        self.assertEqual(len(list(Element.elements.values())), 1)
+        element = list(Element.elements.values())[0]
+        self.assertEqual(element.id, 1)
+        self.assertEqual(element.config, "CTETRA")
+        self.assertEqual(len(element.nodes), 10)
+        self.assertEqual(
+            element.nodes,
+            [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
         )

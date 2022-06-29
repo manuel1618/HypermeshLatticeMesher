@@ -42,7 +42,7 @@ class Element:
 
     def get_Lattice_Connections(self, connectionType: Connection_Type) -> List[Tuple]:
         """
-        Gets the lattice connection from different Element Configs (CHEXA 1st order)
+        Gets the lattice connection from different Element Configs (CHEXA for now)
 
         Parameters:
         ---------
@@ -101,6 +101,39 @@ class Element:
             # TODO
             # - implement 2nd order Connections
 
+            return connections
+
+        elif self.config == "CTETRA" and len(self.nodes) == 4:
+            connections = []
+            connections.append((self.nodes[0], self.nodes[1]))
+            connections.append((self.nodes[1], self.nodes[2]))
+            connections.append((self.nodes[2], self.nodes[0]))
+            connections.append((self.nodes[3], self.nodes[0]))
+            connections.append((self.nodes[3], self.nodes[1]))
+            connections.append((self.nodes[3], self.nodes[2]))
+            if connectionType == Connection_Type["FULL"]:
+                # not implemented yet
+                pass
+            return connections
+        elif self.config == "CTETRA" and len(self.nodes) == 10:
+            connections = []
+            # basis
+            connections.append((self.nodes[0], self.nodes[4]))
+            connections.append((self.nodes[4], self.nodes[1]))
+            connections.append((self.nodes[1], self.nodes[5]))
+            connections.append((self.nodes[5], self.nodes[2]))
+            connections.append((self.nodes[2], self.nodes[6]))
+            connections.append((self.nodes[6], self.nodes[0]))
+            # heights
+            connections.append((self.nodes[0], self.nodes[7]))
+            connections.append((self.nodes[7], self.nodes[3]))
+            connections.append((self.nodes[1], self.nodes[8]))
+            connections.append((self.nodes[8], self.nodes[3]))
+            connections.append((self.nodes[2], self.nodes[9]))
+            connections.append((self.nodes[9], self.nodes[3]))
+            if connectionType == Connection_Type["FULL"]:
+                # not implemented yet
+                pass
             return connections
 
         else:

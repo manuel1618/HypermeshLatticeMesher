@@ -58,7 +58,7 @@ class FEMFileReader:
 
             if "," in line:
                 lineSplit = line.split(",")
-                if lineSplit[0] == "CHEXA":
+                if lineSplit[0] == "CHEXA" or lineSplit[0] == "CTETRA":
                     id = int(lineSplit[1])
                     config = lineSplit[0]
                     nodes = []
@@ -85,7 +85,7 @@ if __name__ == "__main__":
     """
     path_fem_file = (
         os.getcwd().replace("\\", "/")
-        + "/HypermeshLatticeMesher/data/femFiles/smallModel2ndOrder.fem"
+        + "/HypermeshLatticeMesher/data/femFiles/smallModelTet.fem"
     )
     reader = FEMFileReader(path_fem_file)
 
