@@ -58,7 +58,7 @@ class Element:
             connections.append((self.nodes[0], self.nodes[1]))
             connections.append((self.nodes[1], self.nodes[2]))
             connections.append((self.nodes[2], self.nodes[3]))
-            connections.append((self.nodes[3], self.nodes[1]))
+            connections.append((self.nodes[3], self.nodes[0]))
             # top
             connections.append((self.nodes[4], self.nodes[5]))
             connections.append((self.nodes[5], self.nodes[6]))
