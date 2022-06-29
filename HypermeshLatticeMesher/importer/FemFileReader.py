@@ -33,11 +33,20 @@ class FEMFileReader:
                 lineSplit = line.split(",")
                 if lineSplit[0] == "GRID":
                     id = int(lineSplit[1])
-                    x = float(lineSplit[3])
-                    y = float(lineSplit[4])
-                    z = float(lineSplit[5])
+                    x = self.convertToFloat(lineSplit[3])
+                    y = self.convertToFloat(lineSplit[4])
+                    z = self.convertToFloat(lineSplit[5])
                     Node(id, (x, y, z))
         print("Nodes loaded")
+
+    def convertToFloat(self, input: str) -> float:
+        """
+        Small helper method to convert to float. Inserts E if it is left out (option in Hypermesh)
+        """
+        # insert left out E in some notations
+        if "-" in input[1:] and "E" not in input[:]:
+            input = input[0] + input[1:].replace("-", "E-")
+        return float(input)
 
     def read_elements(self):
         """

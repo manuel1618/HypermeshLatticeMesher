@@ -16,6 +16,12 @@ class Test_FEMFileReader(unittest.TestCase):
     """
     ).strip()
 
+    DATA_NODES_NO_E = dedent(
+        """
+    GRID,135,,7.62-2,35.96-3,-94.39-4,
+    """
+    ).strip()
+
     DATA_ELEMENT_HEX8 = dedent(
         """
     CHEXA,75,0,149,155,156,150,151,157,
@@ -44,6 +50,20 @@ class Test_FEMFileReader(unittest.TestCase):
         self.assertEqual(node.xyz[0], -10.313008308411)
         self.assertEqual(node.xyz[1], -7.0365853309631)
         self.assertEqual(node.xyz[2], -45.275356292725)
+
+    @patch("builtins.open", mock_open(read_data=DATA_NODES_NO_E))
+    def test_read_nodes(self):
+        """
+        Simple test for reading in one node with the coordinates
+        """
+        self.assertEqual(len(list(Node.nodes.values())), 0)
+        FEMFileReader("")
+        self.assertEqual(len(list(Node.nodes.values())), 1)
+        node = list(Node.nodes.values())[0]
+        self.assertEqual(node.id, 135)
+        self.assertEqual(node.xyz[0], 0.0762)
+        self.assertEqual(node.xyz[1], 0.03596)
+        self.assertEqual(node.xyz[2], -0.009439)
 
     @patch("builtins.open", mock_open(read_data=DATA_ELEMENT_HEX8))
     def test_read_elements_hex8(self):
