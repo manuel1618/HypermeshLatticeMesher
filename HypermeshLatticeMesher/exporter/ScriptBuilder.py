@@ -30,6 +30,9 @@ class ScriptBuilder:
             y = node.xyz[1]
             z = node.xyz[2]
             self.tcl_commands.append(f"*createnode {x} {y} {z} 0 0 0")
+            self.tcl_commands.append("*createmark nodes 1 -1")
+            self.tcl_commands.append(f"*renumbersolverid nodes 1 {node.id} 1 0 0 0 0 0")
+
 
         print("Nodes written")
 
