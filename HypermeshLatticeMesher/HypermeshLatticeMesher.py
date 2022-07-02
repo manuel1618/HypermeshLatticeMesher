@@ -29,7 +29,7 @@ class HypermeshLatticeMesher:
         scriptbuilder.write_tcl_create_nodes()
         scriptbuilder.write_tcl_create_rods()
         scriptbuilder.write_tcl_save_model_and_close(
-            self.path_hypermesh_Dir + "/model1.hm"
+            self.path_hypermesh_Dir + "model1.hm"
         )
 
         hyperworksStarter = HyperWorksStarter(self.path_tcl_Dir, "model1")
@@ -45,6 +45,6 @@ if __name__ == "__main__":
 
     path_fem_file = (
         os.getcwd().replace("\\", "/")
-        + "/HypermeshLatticeMesher/data/femFiles/smallModel.fem"
+        + "/HypermeshLatticeMesher/data/femFiles/sphereVoxels1stOrderNoE.fem"
     )
     HypermeshLatticeMesher(path_fem_file)

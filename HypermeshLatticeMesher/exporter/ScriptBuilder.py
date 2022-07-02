@@ -33,7 +33,6 @@ class ScriptBuilder:
             self.tcl_commands.append("*createmark nodes 1 -1")
             self.tcl_commands.append(f"*renumbersolverid nodes 1 {node.id} 1 0 0 0 0 0")
 
-
         print("Nodes written")
 
     def write_tcl_create_Material_Property_Component(self):
@@ -92,21 +91,25 @@ class ScriptBuilder:
 
         self.tcl_commands.append("*setoption topofacecolor=4")
         self.tcl_commands.append("*elementtype 61 1")
-        realized_connections = [Tuple]
         element: Element = None
-        i = 1
-        for element in Element.elements.values():
-            print(f"{i} of {len(list(Element.elements.values()))} written")
-            connections = element.get_Lattice_Connections(Connection_Type["FULL"])
-            for connection in connections:
-                if connection not in realized_connections:
-                    node1 = connection[0]
-                    node2 = connection[1]
-                    realized_connections.append((node1, node2))
-                    realized_connections.append((node2, node1))
+        connections_per_element = 1
 
-                    self.tcl_commands.append(f'*rod {node1} {node2} "property_{1}"')
-            i += 1
+        allElements = Element.elements.values()
+        numberOfElements = len(allElements)
+
+        all_connections_to_realize = set()
+        for element in allElements:
+            connections = element.get_Lattice_Connections(Connection_Type["FULL"])
+            if connections_per_element == 1:
+                connections_per_element = len(connections)
+            for connection in connections:
+                all_connections_to_realize.add((min(connection), max(connection)))
+
+        print(f"Writing {numberOfElements} elements to list")
+        for connection in all_connections_to_realize:
+            self.tcl_commands.append(
+                f'*rod {min(connection)} {max(connection)} "property_{1}"'
+            )
 
         print("Rods written")
 
