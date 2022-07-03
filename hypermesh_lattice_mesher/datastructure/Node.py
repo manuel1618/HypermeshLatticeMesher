@@ -13,11 +13,11 @@ class Node:
         """
         Node.nodes.clear()
 
-    def __init__(self, identifier: int, xyz: tuple) -> None:
+    def __init__(self, id_: int, xyz: tuple) -> None:
         """
         Parameters:
         ---------
-        id: int
+        id_: int
             the id of the node
         xyz : tuple
             xyz coordinates
@@ -26,12 +26,12 @@ class Node:
         ---------
         None
         """
-        Node.nodes[id] = self
-        self.id = identifier
+        Node.nodes[id_] = self
+        self.id_ = id_
         self.xyz = xyz
 
     def get_id(self):
         """
         Returns the id of the node
         """
-        return self.id
+        return self.id_

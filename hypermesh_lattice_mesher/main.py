@@ -25,7 +25,7 @@ def mesh(file_path: str):
     if file_path == "":
         path_fem_file = (
             os.getcwd().replace("\\", "/")
-            + "/hypermesh_lattice_mesher/data/femFiles/sphereVoxels1stOrderNoE.fem"
+            + "/hypermesh_lattice_mesher/data/femFiles/smallModel.fem"
         )
     else:
         path_fem_file = file_path.replace("\\", "/")
@@ -34,13 +34,13 @@ def mesh(file_path: str):
         os.getcwd().replace("\\", "/") + "/hypermesh_lattice_mesher/exporter/TCLScript/"
     )
 
-    path_hyperview_dir = (
+    path_hypermesh_dir = (
         os.getcwd().replace("\\", "/") + "/hypermesh_lattice_mesher/exporter/hypermesh/"
     )
 
-    path_hyperview_dir = (
-        os.getcwd().replace("\\", "/") + "/hypermesh_lattice_mesher/data/hyperview/"
-    )
+    # path_hyperview_dir = (
+    #     os.getcwd().replace("\\", "/") + "/hypermesh_lattice_mesher/data/hyperview/"
+    # )
 
     FEMFileReader(path_fem_file)
 
@@ -48,11 +48,11 @@ def mesh(file_path: str):
     scriptbuilder.write_tcl_create_Material_Property_Component()
     scriptbuilder.write_tcl_create_nodes()
     scriptbuilder.write_tcl_create_rods()
-    scriptbuilder.write_tcl_save_model_and_close(path_hyperview_dir + "model1.hm")
+    scriptbuilder.write_tcl_save_model_and_close(path_hypermesh_dir + "model1.hm")
 
     hyperworks_starter = HyperworksStarter(path_tcl_dir, "model1")
     hyperworks_starter.write_script(
-        scriptbuilder.tcl_commands, path_hyperview_dir, False, ""
+        scriptbuilder.tcl_commands, path_hypermesh_dir, False, ""
     )
 
     # Run Hypermesh in batch to save time

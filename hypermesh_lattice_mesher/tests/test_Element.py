@@ -6,7 +6,7 @@ from ..datastructure.element import ConnectionType, Element
 class TestElement(unittest.TestCase):
     def test_element_constructor(self):
         element = Element(1, "config", [1, 2, 3])
-        self.assertEqual(element.id, 1)
+        self.assertEqual(element.id_, 1)
         self.assertEqual(element.config, "config")
         self.assertEqual(element.nodes, [1, 2, 3])
 

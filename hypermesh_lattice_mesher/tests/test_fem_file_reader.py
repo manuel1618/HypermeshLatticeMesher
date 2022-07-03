@@ -58,7 +58,7 @@ class TestFEMFileReader(unittest.TestCase):
         FEMFileReader("")
         self.assertEqual(len(list(Node.nodes.values())), 1)
         node = list(Node.nodes.values())[0]
-        self.assertEqual(node.id, 1)
+        self.assertEqual(node.id_, 1)
         self.assertEqual(node.xyz[0], -10.313008308411)
         self.assertEqual(node.xyz[1], -7.0365853309631)
         self.assertEqual(node.xyz[2], -45.275356292725)
@@ -73,7 +73,7 @@ class TestFEMFileReader(unittest.TestCase):
         FEMFileReader("")
         self.assertEqual(len(list(Node.nodes.values())), 1)
         node = list(Node.nodes.values())[0]
-        self.assertEqual(node.id, 135)
+        self.assertEqual(node.id_, 135)
         self.assertEqual(node.xyz[0], 0.0762)
         self.assertEqual(node.xyz[1], 0.03596)
         self.assertEqual(node.xyz[2], -0.009439)
@@ -85,7 +85,7 @@ class TestFEMFileReader(unittest.TestCase):
         FEMFileReader("")
         self.assertEqual(len(list(Element.elements.values())), 1)
         element = list(Element.elements.values())[0]
-        self.assertEqual(element.id, 75)
+        self.assertEqual(element.id_, 75)
         self.assertEqual(element.config, "CHEXA")
         self.assertEqual(len(element.nodes), 8)
         self.assertEqual(
@@ -100,7 +100,7 @@ class TestFEMFileReader(unittest.TestCase):
         FEMFileReader("")
         self.assertEqual(len(list(Element.elements.values())), 1)
         element = list(Element.elements.values())[0]
-        self.assertEqual(element.id, 37)
+        self.assertEqual(element.id_, 37)
         self.assertEqual(element.config, "CHEXA")
         self.assertEqual(len(element.nodes), 20)
         self.assertEqual(
@@ -136,7 +136,7 @@ class TestFEMFileReader(unittest.TestCase):
         FEMFileReader("")
         self.assertEqual(len(list(Element.elements.values())), 1)
         element = list(Element.elements.values())[0]
-        self.assertEqual(element.id, 1)
+        self.assertEqual(element.id_, 1)
         self.assertEqual(element.config, "CTETRA")
         self.assertEqual(len(element.nodes), 4)
         self.assertEqual(
@@ -156,7 +156,7 @@ class TestFEMFileReader(unittest.TestCase):
         FEMFileReader("")
         self.assertEqual(len(list(Element.elements.values())), 1)
         element = list(Element.elements.values())[0]
-        self.assertEqual(element.id, 1)
+        self.assertEqual(element.id_, 1)
         self.assertEqual(element.config, "CTETRA")
         self.assertEqual(len(element.nodes), 10)
         self.assertEqual(

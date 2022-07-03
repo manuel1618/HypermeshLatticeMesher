@@ -26,7 +26,7 @@ class Element:
     Simple element implementation class modelling hex elements (1st order)
     Parameters:
     ---------
-    id: int
+    id_: int
         the id of the element
     config : str
         config for the element
@@ -36,12 +36,12 @@ class Element:
 
     elements: Dict(int, "Element") = {}
 
-    def __init__(self, identifier: int, config: str, nodes: List[int]) -> None:
+    def __init__(self, id_: int, config: str, nodes: List[int]) -> None:
         """
         Initializes the element with the above mentioned parameters
         """
-        Element.elements[id] = self
-        self.id = identifier
+        Element.elements[id_] = self
+        self.id_ = id_
         self.config = config
         self.nodes = nodes
 

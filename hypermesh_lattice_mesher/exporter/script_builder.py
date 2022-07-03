@@ -29,7 +29,9 @@ class ScriptBuilder:
             z = node.xyz[2]
             self.tcl_commands.append(f"*createnode {x} {y} {z} 0 0 0")
             self.tcl_commands.append("*createmark nodes 1 -1")
-            self.tcl_commands.append(f"*renumbersolverid nodes 1 {node.id} 1 0 0 0 0 0")
+            self.tcl_commands.append(
+                f"*renumbersolverid nodes 1 {node.id_} 1 0 0 0 0 0"
+            )
 
         print("Nodes written")
 
@@ -98,7 +100,7 @@ class ScriptBuilder:
 
         all_connections_to_realize = set()
         for element in allElements:
-            connections = element.get_Lattice_Connections(ConnectionType["FULL"])
+            connections = element.get_lattice_connections(ConnectionType["FULL"])
             if connections_per_element == 1:
                 connections_per_element = len(connections)
             for connection in connections:

@@ -12,7 +12,7 @@ class TestNode(unittest.TestCase):
         x = node.xyz[0]
         y = node.xyz[1]
         z = node.xyz[2]
-        self.assertEqual(node.id, 1)
+        self.assertEqual(node.id_, 1)
         self.assertEqual(x, 1.0)
         self.assertEqual(y, 2.0)
         self.assertEqual(z, 3.0)
