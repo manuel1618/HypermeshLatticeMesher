@@ -1,5 +1,5 @@
 import os
-from ..datastructure.nodes import Node
+from hypermesh_lattice_mesher.datastructure.nodes import Node
 from hypermesh_lattice_mesher.datastructure.elements import Element
 
 
