@@ -1,14 +1,12 @@
 import unittest
-
-from unittest.mock import patch, mock_open
-from ..datastructure.Element import Element
-from ..datastructure.Node import Node
-
-from ..importer.FemFileReader import FEMFileReader
 from textwrap import dedent
+from unittest.mock import patch, mock_open
+from ..datastructure.element import Element
+from ..datastructure.node import Node
+from ..importer.fem_file_reader import FEMFileReader
 
 
-class Test_FEMFileReader(unittest.TestCase):
+class TestFEMFileReader(unittest.TestCase):
 
     DATA_NODES = dedent(
         """

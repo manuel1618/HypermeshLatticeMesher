@@ -1,9 +1,9 @@
 import unittest
 
-from ..datastructure.Node import Node
+from ..datastructure.node import Node
 
 
-class Test_Node(unittest.TestCase):
+class TestNode(unittest.TestCase):
     def test_Node_Constructor(self):
         """
         Tests if the coordinates are correct
