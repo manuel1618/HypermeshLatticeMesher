@@ -1,9 +1,14 @@
+"""
+3D Implmenting Class with connections (lattice)
+"""
+
+
 from __future__ import annotations
 from enum import Enum
 from typing import List, Tuple, Dict
 
 
-class Connection_Type(Enum):
+class ConnectionType(Enum):
     """
     Depending on the user wish, different connection types can be realized.
     Currently implementd:
@@ -29,31 +34,51 @@ class Element:
         List of node Ids belonging to the element
     """
 
-    elements: Dict(int, "Element") = dict()
+    elements: Dict(int, "Element") = {}
 
-    def __init__(self, id: int, config: str, nodes: List[int]) -> None:
+    def __init__(self, identifier: int, config: str, nodes: List[int]) -> None:
+        """
+        Initializes the element with the above mentioned parameters
+        """
         Element.elements[id] = self
-        self.id = id
+        self.id = identifier
         self.config = config
         self.nodes = nodes
 
-    def reset():
+    @classmethod
+    def reset(cls):
+        """
+        Resets all elements to empty list
+        """
         Element.elements.clear()
 
-    def get_Lattice_Connections(self, connectionType: Connection_Type) -> List[Tuple]:
+    def get_lattice_connections(self, connection_type: ConnectionType) -> List[Tuple]:
         """
-        Gets the lattice connection from different Element Configs (CHEXA for now)
+        Gets the lattice connection from different Element Configs
 
         Parameters:
         ---------
-        connectionType: Connection_Type
+        connectionType: ConnectionType
             how many connections should be returned
         --------
         returns: -> List[Tuple] of the connections pairs (node ids)
         """
 
-        if self.config == "CHEXA" and len(self.nodes) == 8:
-            connections = []
+        if self.config == "CHEXA":
+            return self.__get_lattice_connections_hex(connection_type)
+        if self.config == "CTETRA":
+            return self.__get_lattice_connections_tet(connection_type)
+        return None
+
+    def __get_lattice_connections_hex(
+        self, connection_type: ConnectionType
+    ) -> List[Tuple]:
+        """
+        Private Method for getting Hex Lattice Connections
+        """
+
+        connections = []
+        if len(self.nodes) == 8:
             # bottom
             connections.append((self.nodes[0], self.nodes[1]))
             connections.append((self.nodes[1], self.nodes[2]))
@@ -71,7 +96,7 @@ class Element:
             connections.append((self.nodes[3], self.nodes[7]))
 
             # FULL
-            if connectionType == Connection_Type["FULL"]:
+            if connection_type == ConnectionType["FULL"]:
                 # cross bottom and top
                 connections.append((self.nodes[0], self.nodes[2]))
                 connections.append((self.nodes[1], self.nodes[3]))
@@ -95,28 +120,35 @@ class Element:
 
             return connections
 
-        elif self.config == "CHEXA" and len(self.nodes) == 20:
-            connections = []
-
+        if len(self.nodes) == 20:
             # TODO
             # - implement 2nd order Connections
 
             return connections
 
-        elif self.config == "CTETRA" and len(self.nodes) == 4:
-            connections = []
+        print("Unknown element type: " + self.config)
+        print(f"Number Of Nodes: {len(self.nodes)}")
+        return None
+
+    def __get_lattice_connections_tet(
+        self, connection_type: ConnectionType
+    ) -> List[Tuple]:
+        """
+        Private Method for getting Tetra Lattice Connections
+        """
+        connections = []
+        if len(self.nodes) == 4:
             connections.append((self.nodes[0], self.nodes[1]))
             connections.append((self.nodes[1], self.nodes[2]))
             connections.append((self.nodes[2], self.nodes[0]))
             connections.append((self.nodes[3], self.nodes[0]))
             connections.append((self.nodes[3], self.nodes[1]))
             connections.append((self.nodes[3], self.nodes[2]))
-            if connectionType == Connection_Type["FULL"]:
-                # not implemented yet
+            if connection_type == ConnectionType["FULL"]:
+                # not implemented yet # TODO
                 pass
-            return connections
-        elif self.config == "CTETRA" and len(self.nodes) == 10:
-            connections = []
+
+        if len(self.nodes) == 10:
             # basis
             connections.append((self.nodes[0], self.nodes[4]))
             connections.append((self.nodes[4], self.nodes[1]))
@@ -131,12 +163,7 @@ class Element:
             connections.append((self.nodes[8], self.nodes[3]))
             connections.append((self.nodes[2], self.nodes[9]))
             connections.append((self.nodes[9], self.nodes[3]))
-            if connectionType == Connection_Type["FULL"]:
-                # not implemented yet
+            if connection_type == ConnectionType["FULL"]:
+                # not implemented yet #TODO
                 pass
-            return connections
-
-        else:
-            print("Unknown element type: " + self.config)
-            print(f"Number Of Nodes: {len(self.nodes)}")
-            return None
+        return connections

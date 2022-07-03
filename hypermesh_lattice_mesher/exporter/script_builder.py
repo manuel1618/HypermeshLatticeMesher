@@ -1,6 +1,6 @@
-from ..exporter.HyperWorksStarter import HyperWorksStarter
-from ..datastructure.Node import Node
-from ..datastructure.Element import Element, Connection_Type
+from .hyperworks_starter import HyperworksStarter
+from ..datastructure.node import Node
+from ..datastructure.element import Element, ConnectionType
 
 
 class ScriptBuilder:
@@ -17,7 +17,7 @@ class ScriptBuilder:
     tcl_commands = []
 
     def __init__(self):
-        self.tcl_commands = HyperWorksStarter.initialize_tcl_commands()
+        self.tcl_commands = HyperworksStarter.initialize_tcl_commands()
 
     def write_tcl_create_nodes(self):
         """
@@ -98,7 +98,7 @@ class ScriptBuilder:
 
         all_connections_to_realize = set()
         for element in allElements:
-            connections = element.get_Lattice_Connections(Connection_Type["FULL"])
+            connections = element.get_Lattice_Connections(ConnectionType["FULL"])
             if connections_per_element == 1:
                 connections_per_element = len(connections)
             for connection in connections:

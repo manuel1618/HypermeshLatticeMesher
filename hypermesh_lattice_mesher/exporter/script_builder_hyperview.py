@@ -1,4 +1,9 @@
-from ..exporter.HyperWorksStarter import HyperWorksStarter
+"""
+Hyperview Script Module
+"""
+
+
+from hypermesh_lattice_mesher.exporter.hyperworks_starter import HyperworksStarter
 
 
 class ScriptBuilderHyperview:
@@ -14,22 +19,21 @@ class ScriptBuilderHyperview:
 
     tcl_commands = []
 
-    def __init__(self):
+    def __init__(self, path_to_working_dir: str):
         self.tcl_commands = []
+        self.path_to_working_dir = path_to_working_dir.replace("\\", "/")
 
-    def write_tcl_read_rod_stress(
-        self, path_to_h3d_file: str, path_to_working_dir: str
-    ):
+    def write_tcl_read_rod_stress(self, path_to_h3d_file: str):
         """
         Creates the hyperview Script which creates a file with elems ids\
              and their stress values
         """
-        self.path_to_working_dir = path_to_working_dir.replace("\\", "/")
-        self.path_to_h3d_file = path_to_h3d_file.replace("\\", "/")
+
+        path_to_h3d_file = path_to_h3d_file.replace("\\", "/")
 
         self.tcl_commands.append(f"cd {  self.path_to_working_dir}")
         self.tcl_commands.append(f'set outPath "{self.path_to_working_dir}/output.txt"')
-        self.tcl_commands.append(f'set import_file_path "{self.path_to_h3d_file}"')
+        self.tcl_commands.append(f'set import_file_path "{path_to_h3d_file}"')
         self.tcl_commands.append("hwi OpenStack")
         self.tcl_commands.append("hwi GetSessionHandle session")
         self.tcl_commands.append("session GetProjectHandle project")
@@ -62,17 +66,25 @@ class ScriptBuilderHyperview:
         self.tcl_commands.append("myQuery WriteData $outPath")
         self.tcl_commands.append("hwi CloseStack")
 
+    def write_tcl_read_node_displacements(self, path_to_h3d_file):
+        """
+        Creats the Displacement field from the model
+        """
+        # TODO
+        path_to_h3d_file = path_to_h3d_file.replace("\\", "/")
+
 
 if __name__ == "__main__":
     # local testing only
-    scriptBuilder = ScriptBuilderHyperview()
+    scriptBuilder = ScriptBuilderHyperview(
+        r"D:\GITHUB\HypermeshLatticeMesher\HypermeshLatticeMesher\exporter\hypermesh"
+    )
     scriptBuilder.write_tcl_read_rod_stress(
         r"D:\GITHUB\HypermeshLatticeMesher\HypermeshLatticeMesher\exporter\hypermesh\
             \model1.h3d",
-        r"D:\GITHUB\HypermeshLatticeMesher\HypermeshLatticeMesher\exporter\hypermesh",
     )
 
-    hyperworksStarter = HyperWorksStarter(
+    hyperworksStarter = HyperworksStarter(
         r"D:\GITHUB\HypermeshLatticeMesher\HypermeshLatticeMesher\exporter\hypermesh",
         "model1Hyperview",
     )

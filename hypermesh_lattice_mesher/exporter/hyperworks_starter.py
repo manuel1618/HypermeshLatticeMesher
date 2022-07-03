@@ -1,12 +1,13 @@
-import time
-from typing import List
 import os
 import glob
-import psutil
+import time
+from typing import List
 from pathlib import Path
+import subprocess
+import psutil
 
 
-class HyperWorksStarter:
+class HyperworksStarter:
     """
     Hypermesh Starter Class (Windows only currently)
     version should be above 2021 - else: check paths!
@@ -34,20 +35,38 @@ class HyperWorksStarter:
         print(self.script_path)
         self.tcl_commands = []
 
-    def initialize_tcl_commands() -> List:
+    @classmethod
+    def initialize_tcl_commands(cls) -> List:
+        """
+        Initializes the command list to be used on hypermesh (user profile: Optistruct)
+        """
         tcl_commands = []
         tcl_commands.append(
-            f'*templatefileset "{HyperWorksStarter.ALTAIR_HOME}\
+            f'*templatefileset "{HyperworksStarter.ALTAIR_HOME}\
             /hwdesktop/templates/feoutput/optistruct/optistruct"'
         )
         return tcl_commands
 
-    def initialize_tcl_commands_hyperview() -> List:
+    @classmethod
+    def initialize_tcl_commands_hyperview(cls) -> List:
+        """
+        Initializes the command list for hyperview - empty list for now
+        """
         tcl_commands = []
         return tcl_commands
 
     def runHyperMesh(self, batch=False, wait=False):
-        import subprocess
+        """
+        Executes CMD Process for running Hypermesh with the tcl commands
+
+        Parameters:
+        ----------
+        batch:bool
+            batch_mode for Hypermesh switch
+        wait:bool
+            In case the process should wait until code execution is finished
+
+        """
 
         # Hide Output of the shell - relax!
         startupinfo = subprocess.STARTUPINFO()
@@ -64,7 +83,8 @@ class HyperWorksStarter:
 
         else:
             process = subprocess.Popen(
-                [self.PATH_HYPERMESH, "-tcl", self.script_path], startupinfo=startupinfo
+                [self.PATH_HYPERMESH, "-tcl", self.script_path],
+                startupinfo=startupinfo,
             )
 
         print("Waiting for Hypermesh Process to Finish")
@@ -89,9 +109,16 @@ class HyperWorksStarter:
 
     def runHyperview(self, batch=False, wait=False):
         """
-        based on running hypermesh
+        CMD Process similar to running hypermesh
+
+        Parameters:
+        ----------
+        batch:bool
+            batch_mode for Hypermesh switch
+        wait:bool
+            In case the process should wait until code execution is finished
+
         """
-        import subprocess
 
         # Hide Output of the shell - relax!
         startupinfo = subprocess.STARTUPINFO()
@@ -154,16 +181,16 @@ class HyperWorksStarter:
         writes the script and runs it. For the list or user_param,\
              see the HyperWorksStarter method
         """
-        self.tcl_commands = [
-            line for line in tcl_commands
-        ]  # copy as we don't want to change the original data
+        # copy as we don't want to change the orig
+        self.tcl_commands = tcl_commands.copy()
+
         calc_dir = calc_dir.replace("\\", "/")  # hypermesh does not like \
         self.tcl_commands.insert(0, f"cd {calc_dir}")  # change working directory
         fem_path = calc_dir + "/" + self.model_name + ".fem"
         if run:
             self.add_export_and_run_options(fem_path, user_param)
 
-        with open(self.script_path, "w") as tcl_file:
+        with open(self.script_path, "w", encoding="utf-8") as tcl_file:
             for line in self.tcl_commands:
                 tcl_file.write("%s\n" % line)
 
@@ -171,12 +198,12 @@ class HyperWorksStarter:
         """
         placeholder for now
         """
-        self.tcl_commands = [
-            line for line in tcl_commands
-        ]  # copy as we don't want to change the original data
+        # copy as we don't want to change the orig
+        self.tcl_commands = tcl_commands.copy()
+
         calc_dir = calc_dir.replace("\\", "/")  # hypermesh does not like \
         self.tcl_commands.insert(0, f"cd {calc_dir}")  # change working directory
-        with open(self.script_path, "w") as tcl_file:
+        with open(self.script_path, "w", encoding="utf-8") as tcl_file:
             for line in self.tcl_commands:
                 tcl_file.write("%s\n" % line)
 
