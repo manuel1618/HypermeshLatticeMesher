@@ -1,8 +1,8 @@
 import unittest
 from textwrap import dedent
 from unittest.mock import patch, mock_open
-from hypermesh_lattice_mesher.datastructure.element import Element
-from hypermesh_lattice_mesher.datastructure.node import Node
+from hypermesh_lattice_mesher.datastructure.elements import Element
+from hypermesh_lattice_mesher.datastructure.nodes import Node
 from hypermesh_lattice_mesher.importer.fem_file_reader import FEMFileReader
 
 

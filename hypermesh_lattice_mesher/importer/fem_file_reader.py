@@ -1,6 +1,6 @@
 import os
-from ..datastructure.node import Node
-from ..datastructure.element import Element
+from ..datastructure.nodes import Node
+from hypermesh_lattice_mesher.datastructure.elements import Element
 
 
 class FEMFileReader:

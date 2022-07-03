@@ -1,6 +1,6 @@
 import unittest
 
-from hypermesh_lattice_mesher.datastructure.node import Node
+from hypermesh_lattice_mesher.datastructure.nodes import Node
 
 
 class TestNode(unittest.TestCase):

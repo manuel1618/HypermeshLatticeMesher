@@ -1,6 +1,6 @@
 import unittest
 
-from hypermesh_lattice_mesher.datastructure.element import ConnectionType, Element
+from hypermesh_lattice_mesher.datastructure.elements import ConnectionType, Element
 
 
 class TestElement(unittest.TestCase):
