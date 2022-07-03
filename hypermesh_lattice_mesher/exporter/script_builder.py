@@ -1,6 +1,6 @@
 from .hyperworks_starter import HyperworksStarter
-from ..datastructure.node import Node
-from ..datastructure.element import Element, ConnectionType
+from hypermesh_lattice_mesher.datastructure.node import Node
+from hypermesh_lattice_mesher.datastructure.element import Element, ConnectionType
 
 
 class ScriptBuilder:
