@@ -1,10 +1,10 @@
 import unittest
 
 from unittest.mock import patch, mock_open
-from HypermeshLatticeMesher.datastructure.Element import Element
-from HypermeshLatticeMesher.datastructure.Node import Node
+from ..datastructure.Element import Element
+from ..datastructure.Node import Node
 
-from HypermeshLatticeMesher.importer.FemFileReader import FEMFileReader
+from ..importer.FemFileReader import FEMFileReader
 from textwrap import dedent
 
 
@@ -39,15 +39,15 @@ class Test_FEMFileReader(unittest.TestCase):
 
     DATA_ELEMENT_TET4 = dedent(
         """
-        CTETRA,1,0,1,2,3,4,
-        """
+    CTETRA,1,0,1,2,3,4,
+    """
     ).strip()
 
     DATA_ELEMENT_TET10 = dedent(
         """
-        CTETRA,1,0,1,2,3,4,5,6,
-        +,7,8,9,10,
-        """
+    CTETRA,1,0,1,2,3,4,5,6,
+    +,7,8,9,10,
+    """
     ).strip()
 
     @patch("builtins.open", mock_open(read_data=DATA_NODES))
@@ -55,6 +55,7 @@ class Test_FEMFileReader(unittest.TestCase):
         """
         Simple test for reading in one node with the coordinates
         """
+        Node.reset()
         self.assertEqual(len(list(Node.nodes.values())), 0)
         FEMFileReader("")
         self.assertEqual(len(list(Node.nodes.values())), 1)
@@ -65,10 +66,11 @@ class Test_FEMFileReader(unittest.TestCase):
         self.assertEqual(node.xyz[2], -45.275356292725)
 
     @patch("builtins.open", mock_open(read_data=DATA_NODES_NO_E))
-    def test_read_nodes(self):
+    def test_read_nodes_neE(self):
         """
         Simple test for reading in one node with the coordinates
         """
+        Node.reset()
         self.assertEqual(len(list(Node.nodes.values())), 0)
         FEMFileReader("")
         self.assertEqual(len(list(Node.nodes.values())), 1)
@@ -130,7 +132,7 @@ class Test_FEMFileReader(unittest.TestCase):
         )
 
     @patch("builtins.open", mock_open(read_data=DATA_ELEMENT_TET4))
-    def test_read_elements_hex20(self):
+    def test_read_elements_tet4(self):
         Element.reset()
         self.assertEqual(len(list(Element.elements.values())), 0)
         FEMFileReader("")
@@ -150,7 +152,7 @@ class Test_FEMFileReader(unittest.TestCase):
         )
 
     @patch("builtins.open", mock_open(read_data=DATA_ELEMENT_TET10))
-    def test_read_elements_hex20(self):
+    def test_read_elements_tet10(self):
         Element.reset()
         self.assertEqual(len(list(Element.elements.values())), 0)
         FEMFileReader("")

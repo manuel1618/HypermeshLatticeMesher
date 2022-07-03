@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "hypermesh-lattice-mesher"
+version = "0.1.0"
+description = "This is a CLI to mesh lattice structures in hypermesh"
+authors = ["Manuel Ramsaier <manuel.ramsiaer89@gmail.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+psutil = "^5.9.1"
+typer = "^0.4.2"
+
+[tool.poetry.dev-dependencies]
+flake8 = "^4.0.1"
+black = "^22.6.0"
+isort = "^5.10.1"
+pre-commit = "^2.19.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+hypermesh-lattice-mesher = "hypermesh_lattice_mesher.main:app"

@@ -1,8 +1,6 @@
-from typing import Tuple
-
-from HypermeshLatticeMesher.exporter.HyperWorksStarter import HyperWorksStarter
-from HypermeshLatticeMesher.datastructure.Node import Node
-from HypermeshLatticeMesher.datastructure.Element import Element, Connection_Type
+from ..exporter.HyperWorksStarter import HyperWorksStarter
+from ..datastructure.Node import Node
+from ..datastructure.Element import Element, Connection_Type
 
 
 class ScriptBuilder:

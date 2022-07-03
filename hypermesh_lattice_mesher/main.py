@@ -1,7 +1,10 @@
 import os
-from HypermeshLatticeMesher.exporter.HyperWorksStarter import HyperWorksStarter
-from HypermeshLatticeMesher.exporter.ScriptBuilder import ScriptBuilder
-from HypermeshLatticeMesher.importer.FemFileReader import FEMFileReader
+import typer
+from .exporter.HyperWorksStarter import HyperWorksStarter
+from .exporter.ScriptBuilder import ScriptBuilder
+from .importer.FemFileReader import FEMFileReader
+
+app = typer.Typer()
 
 
 class HypermeshLatticeMesher:
@@ -10,16 +13,16 @@ class HypermeshLatticeMesher:
 
         self.path_tcl_Dir = (
             os.getcwd().replace("\\", "/")
-            + "/HypermeshLatticeMesher/exporter/TCLScript/"
+            + "/hypermesh_lattice_mesher/exporter/TCLScript/"
         )
 
         self.path_hypermesh_Dir = (
             os.getcwd().replace("\\", "/")
-            + "/HypermeshLatticeMesher/exporter/hypermesh/"
+            + "/hypermesh_lattice_mesher/exporter/hypermesh/"
         )
 
         self.path_hyperview_Dir = (
-            os.getcwd().replace("\\", "/") + "/HypermeshLatticeMesher/data/hyperview/"
+            os.getcwd().replace("\\", "/") + "/hypermesh_lattice_mesher/data/hyperview/"
         )
 
         FEMFileReader(self.path_fem_file)
@@ -41,10 +44,25 @@ class HypermeshLatticeMesher:
         hyperworksStarter.runHyperMesh(True, False)
 
 
-if __name__ == "__main__":
+@app.command()
+def mesh(file_path: str):
+    if file_path == "":
+        path_fem_file = (
+            os.getcwd().replace("\\", "/")
+            + "/hypermesh_lattice_mesher/data/femFiles/sphereVoxels1stOrderNoE.fem"
+        )
+    else:
+        path_fem_file = file_path.replace("\\", "/")
 
-    path_fem_file = (
-        os.getcwd().replace("\\", "/")
-        + "/HypermeshLatticeMesher/data/femFiles/sphereVoxels1stOrderNoE.fem"
-    )
     HypermeshLatticeMesher(path_fem_file)
+
+
+@app.callback()
+def callback():
+    """
+    This is a lattice mesher for hypermesh
+    """
+
+
+if __name__ == "__main__":
+    app()

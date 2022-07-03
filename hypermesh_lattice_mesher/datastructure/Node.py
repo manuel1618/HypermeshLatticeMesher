@@ -1,7 +1,3 @@
-from numpy import array
-from typing import List
-
-
 class Node:
     """
     Simple node implementation class modelling nodes in cartesian space
@@ -14,6 +10,9 @@ class Node:
     """
 
     nodes = dict()
+
+    def reset():
+        Node.nodes.clear()
 
     def __init__(self, id: int, xyz: tuple) -> None:
         Node.nodes[id] = self

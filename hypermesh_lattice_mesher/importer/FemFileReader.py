@@ -1,11 +1,12 @@
 import os
-from HypermeshLatticeMesher.datastructure.Node import Node
-from HypermeshLatticeMesher.datastructure.Element import Element
+from ..datastructure.Node import Node
+from ..datastructure.Element import Element
 
 
 class FEMFileReader:
     """
-    Class for importing data from a .fem file and creating datastructure entities to be used later on
+    Class for importing data from a .fem file and creating
+    datastructure entities to be used later on
 
     Parameters:
     ---------
@@ -64,15 +65,15 @@ class FEMFileReader:
                     nodes = []
                     for j in range(3, len(lineSplit) - 1):
                         nodes.append(int(lineSplit[j]))
-                    while self.lines[i + 1][0] == "+":
-                        i += 1
-                        line = self.lines[i]
-                        lineSplit = line.split(",")
-                        for j in range(1, len(lineSplit) - 1):
-                            nodes.append(int(lineSplit[j]))
-                        if i == len(self.lines) - 1:  # eof fix
-                            break
-
+                    if len(self.lines) > i + 1:
+                        while self.lines[i + 1][0] == "+":
+                            i += 1
+                            line = self.lines[i]
+                            lineSplit = line.split(",")
+                            for j in range(1, len(lineSplit) - 1):
+                                nodes.append(int(lineSplit[j]))
+                            if i == len(self.lines) - 1:  # eof fix
+                                break
                     Element(id, config, nodes)
 
         print("Elements loaded")
