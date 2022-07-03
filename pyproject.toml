@@ -40,6 +40,8 @@ disable=[
     "duplicate-code",
     # Enforcing f-strings is too strict
     "consider-using-f-string",
+    # TODOs are not to be fixed with every push / pull request
+    'fixme'
 ]
 
 [tool.pylint.basic]

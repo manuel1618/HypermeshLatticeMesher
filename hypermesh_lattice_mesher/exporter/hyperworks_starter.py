@@ -123,21 +123,16 @@ class HyperworksStarter:
         # if (hidden):
         # startupinfo.wShowWindow = subprocess.SW_HIDE
 
-        # print(script_path)
+        process_open = []
         if batch:
-            process = subprocess.Popen(
-                [self.PATH_HYPERVIEW, "-b", "-tcl", self.script_path],
-                startupinfo=startupinfo,
-            )
-
+            process_open = [self.PATH_HYPERVIEW, "-b", "-tcl", self.script_path]
         else:
-            process = subprocess.Popen(
-                [self.PATH_HYPERVIEW, "-tcl", self.script_path], startupinfo=startupinfo
-            )
+            process_open = [self.PATH_HYPERVIEW, "-tcl", self.script_path]
 
-        if wait:
-            print("Waiting for Hyperview Process to Finish")
+        with subprocess.Popen(process_open, startupinfo=startupinfo) as process:
+            print("Waiting for Hypermesh Process to Finish")
             process.wait()
+
         # batch needs special attention:
         if wait:
             if checkIfProcessRunning("hw.exe"):
@@ -160,11 +155,11 @@ class HyperworksStarter:
         self.tcl_commands.append("hm_answernext yes")  # overwrite
         self.tcl_commands.append(
             f'*feoutputwithdata "{altair_home_exec}/hwdesktop/templates/feoutput'
-            '/optistruct/optistruct" "{fem_path}" 1 0 2 1 1'
+            f'/optistruct/optistruct" "{fem_path}" 1 0 2 1 1'
         )
         self.tcl_commands.append(
             f'exec "{altair_home_exec}/hwsolvers/scripts/optistruct.bat'
-            '{fem_path}" {user_param} &'
+            f'{fem_path}" {user_param} &'
         )
         # no gui (later)
         # tcl_commands.append(f"exec cmd /K START \"{altair_home_exec}/hwsolvers"\
