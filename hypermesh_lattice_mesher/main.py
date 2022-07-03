@@ -60,7 +60,10 @@ def mesh(file_path: str):
 @app.callback()
 def callback():
     """
-    This is a lattice mesher for hypermesh
+    This CLI provides Lattice Meshing capabilites based on a single .fem File.
+    In future versions (date of this comment: 02.07.2022), it will be possible to also
+    just use step files which will be auto tetrameshed and taken as an input for the
+    lattice mesh generation.
     """
 
 

@@ -37,7 +37,8 @@ class HyperWorksStarter:
     def initialize_tcl_commands() -> List:
         tcl_commands = []
         tcl_commands.append(
-            f'*templatefileset "{HyperWorksStarter.ALTAIR_HOME}/hwdesktop/templates/feoutput/optistruct/optistruct"'
+            f'*templatefileset "{HyperWorksStarter.ALTAIR_HOME}\
+            /hwdesktop/templates/feoutput/optistruct/optistruct"'
         )
         return tcl_commands
 
@@ -134,20 +135,24 @@ class HyperWorksStarter:
         altair_home_exec = self.ALTAIR_HOME.replace("\\", "/")
         self.tcl_commands.append("hm_answernext yes")  # overwrite
         self.tcl_commands.append(
-            f'*feoutputwithdata "{altair_home_exec}/hwdesktop/templates/feoutput/optistruct/optistruct" "{fem_path}" 1 0 2 1 1'
+            f'*feoutputwithdata "{altair_home_exec}/hwdesktop/templates/feoutput\
+                /optistruct/optistruct" "{fem_path}" 1 0 2 1 1'
         )
         self.tcl_commands.append(
-            f'exec "{altair_home_exec}/hwsolvers/scripts/optistruct.bat" "{fem_path}" {user_param} &'
+            f'exec "{altair_home_exec}/hwsolvers/scripts/optistruct.bat"\
+                 "{fem_path}" {user_param} &'
         )
         # no gui (later)
-        # tcl_commands.append(f"exec cmd /K START \"{altair_home_exec}/hwsolvers/scripts/optistruct.bat\" \"{export_path}\" {user_param} &")
+        # tcl_commands.append(f"exec cmd /K START \"{altair_home_exec}/hwsolvers\
+        # /scripts/optistruct.bat\" \"{export_path}\" {user_param} &")
         # self.tcl_commands.append("*quit 1")
 
     def write_script(
         self, tcl_commands: List[str], calc_dir: str, run: bool, user_param: str
     ):
         """
-        writes the script and runs it. For the list or user_param, see the HyperWorksStarter method
+        writes the script and runs it. For the list or user_param,\
+             see the HyperWorksStarter method
         """
         self.tcl_commands = [
             line for line in tcl_commands

@@ -84,7 +84,8 @@ class ScriptBuilder:
 
     def write_tcl_create_rods(self):
         """
-        Creates all the rods. Property should have been set. Simple implementation with all rods in one component / property / beamsection / material
+        Creates all the rods. Property should have been set. Simple implementation
+        with all rods in one component / property / beamsection / material
         """
 
         self.tcl_commands.append("*setoption topofacecolor=4")

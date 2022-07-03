@@ -1,9 +1,9 @@
-/hypermesh_lattice_mesher/exporter/TCLScript/*
-!/hypermesh_lattice_mesher/exporter/TCLScript/.gitkeep
-/hypermesh_lattice_mesher/exporter/hypermesh/*
-!/hypermesh_lattice_mesher/exporter/hypermesh/.gitkeep
-/hypermesh_lattice_mesher/data/hyperview/*
-!/hypermesh_lattice_mesher/data/hyperview/.gitkeep
+hypermesh_lattice_mesher/exporter/TCLScript/*
+!hypermesh_lattice_mesher/exporter/TCLScript/.gitkeep
+hypermesh_lattice_mesher/exporter/hypermesh/*
+!hypermesh_lattice_mesher/exporter/hypermesh/.gitkeep
+hypermesh_lattice_mesher/data/hyperview/*
+!hypermesh_lattice_mesher/data/hyperview/.gitkeep
 *.tcl
 
 

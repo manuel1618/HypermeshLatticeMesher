@@ -21,7 +21,8 @@ class ScriptBuilderHyperview:
         self, path_to_h3d_file: str, path_to_working_dir: str
     ):
         """
-        Creates the hyperview Script which creates a file with elems ids and their stress values
+        Creates the hyperview Script which creates a file with elems ids\
+             and their stress values
         """
         self.path_to_working_dir = path_to_working_dir.replace("\\", "/")
         self.path_to_h3d_file = path_to_h3d_file.replace("\\", "/")
@@ -44,7 +45,8 @@ class ScriptBuilderHyperview:
         self.tcl_commands.append("myModel GetResultCtrlHandle myResult")
         self.tcl_commands.append("set current [myResult GetCurrentSubcase]")
         self.tcl_commands.append(
-            "myResult SetCurrentSimulation [expr [myResult GetNumberOfSimulations $current]-1]"
+            "myResult SetCurrentSimulation [expr [myResult GetNumberOfSimulations\
+                 $current]-1]"
         )
         self.tcl_commands.append("set data_types [myResult GetDataTypeList $current]")
         self.tcl_commands.append("myResult GetContourCtrlHandle myContour")
@@ -65,7 +67,8 @@ if __name__ == "__main__":
     # local testing only
     scriptBuilder = ScriptBuilderHyperview()
     scriptBuilder.write_tcl_read_rod_stress(
-        r"D:\GITHUB\HypermeshLatticeMesher\HypermeshLatticeMesher\exporter\hypermesh\model1.h3d",
+        r"D:\GITHUB\HypermeshLatticeMesher\HypermeshLatticeMesher\exporter\hypermesh\
+            \model1.h3d",
         r"D:\GITHUB\HypermeshLatticeMesher\HypermeshLatticeMesher\exporter\hypermesh",
     )
 

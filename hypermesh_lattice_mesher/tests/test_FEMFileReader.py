@@ -66,7 +66,7 @@ class Test_FEMFileReader(unittest.TestCase):
         self.assertEqual(node.xyz[2], -45.275356292725)
 
     @patch("builtins.open", mock_open(read_data=DATA_NODES_NO_E))
-    def test_read_nodes_neE(self):
+    def test_read_nodes_noE(self):
         """
         Simple test for reading in one node with the coordinates
         """

@@ -42,7 +42,8 @@ class FEMFileReader:
 
     def convertToFloat(self, input: str) -> float:
         """
-        Small helper method to convert to float. Inserts E if it is left out (option in Hypermesh)
+        Small helper method to convert to float.
+        Inserts E if it is left out (option in Hypermesh)
         """
         # insert left out E in some notations
         if "-" in input[1:] and "E" not in input[:]:
