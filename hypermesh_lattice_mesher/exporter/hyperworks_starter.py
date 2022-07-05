@@ -1,4 +1,5 @@
 import os
+import sys
 import glob
 import time
 from typing import List
@@ -18,7 +19,10 @@ class HyperworksStarter:
 
     # File paths
     OPTISTRUCT_PROCESS_NAME = f"optistruct_{ALTAIR_VERSION}_win64.exe"
-    ALTAIR_HOME = os.environ["ProgramFiles"] + f"\\Altair\\{ALTAIR_VERSION}"
+
+    ALTAIR_HOME = "NOT_SET_ONLY_WINDOWS"
+    if sys.platform.startswith("win"):
+        ALTAIR_HOME = os.environ["ProgramFiles"] + f"\\Altair\\{ALTAIR_VERSION}"
     ALTAIR_HOME = ALTAIR_HOME.replace("\\", "/")
     PATH_HYPERMESH = ALTAIR_HOME + "\\hwdesktop\\hm\\bin\\win64\\hmopengl.exe"
     PATH_HYPERVIEW = ALTAIR_HOME + "\\hwdesktop\\hw\\bin\\win64\\hw.exe"
