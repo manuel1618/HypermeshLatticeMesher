@@ -1,4 +1,3 @@
-import os
 from hypermesh_lattice_mesher.datastructure.nodes import Node
 from hypermesh_lattice_mesher.datastructure.elements import Element
 
@@ -73,15 +72,3 @@ class FEMFileReader:
                             nodes.append(int(lineSplit[j]))
 
                     Element(id_, config, nodes)
-
-
-if __name__ == "__main__":
-    path_fem_file = (
-        os.getcwd().replace("\\", "/")
-        + "/HypermeshLatticeMesher/data/femFiles/smallModelTet.fem"
-    )
-    reader = FEMFileReader(path_fem_file)
-
-    print(len(Node.nodes))
-    print(len(Element.elements))
-    print(len(list(Element.elements.values())[0].nodes))

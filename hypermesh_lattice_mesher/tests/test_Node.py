@@ -16,3 +16,4 @@ class TestNode(unittest.TestCase):
         self.assertEqual(x, 1.0)
         self.assertEqual(y, 2.0)
         self.assertEqual(z, 3.0)
+        self.assertEqual(node.get_id(), node.id_)

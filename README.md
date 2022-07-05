@@ -23,3 +23,6 @@ Some notes for better understanding the code in here (mostly for myself)
 ### Tests
 
 - run the tests via: 'python -m unittest discover'
+### Coverage
+
+- poetry run pytest --cov=hypermesh_lattice_mesher --cov-report=term-missing
