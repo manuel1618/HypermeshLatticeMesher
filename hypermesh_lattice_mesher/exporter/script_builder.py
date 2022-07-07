@@ -1,5 +1,6 @@
 from hypermesh_lattice_mesher.datastructure.nodes import Node
 from hypermesh_lattice_mesher.datastructure.elements import Element, ConnectionType
+from hypermesh_lattice_mesher.datastructure.materials import Material
 from .hyperworks_starter import HyperworksStarter
 
 
@@ -35,16 +36,17 @@ class ScriptBuilder:
 
         print("Nodes written")
 
-    def write_tcl_create_Material_Property_Component(self):
+    def write_tcl_create_Material_Property_Component(
+        self, material: Material, diameter: float
+    ):
         """
         Creates all the basic components - very simmple implementation for now
         """
 
         material_name = "Material1"
-        diameter = 0.2
-        yngsMdl = 210000
-        nu = 0.3
-        density = 7.8e-9
+        yngsMdl = material.yngs_module
+        nu = material.nu
+        density = material.density
 
         self.tcl_commands.append(
             f'*createentity mats cardimage=MAT1 includeid=0 name="{material_name}"'

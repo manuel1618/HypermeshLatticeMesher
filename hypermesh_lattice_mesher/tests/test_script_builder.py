@@ -1,7 +1,9 @@
 import unittest
+from hypermesh_lattice_mesher.datastructure.elements import Element
 from hypermesh_lattice_mesher.exporter.hyperworks_starter import HyperworksStarter
 from hypermesh_lattice_mesher.exporter.script_builder import ScriptBuilder
 from hypermesh_lattice_mesher.datastructure.nodes import Node
+from hypermesh_lattice_mesher.datastructure.materials import Material
 
 
 class test_script_builder(unittest.TestCase):
@@ -10,8 +12,8 @@ class test_script_builder(unittest.TestCase):
         self.assertEqual(
             scriptBuilder.tcl_commands,
             [
-                f'*templatefileset "{HyperworksStarter.ALTAIR_HOME}/hwdesktop/templates/'
-                'feoutput/optistruct/optistruct"'
+                f'*templatefileset "{HyperworksStarter.ALTAIR_HOME}'
+                '/hwdesktop/templates/feoutput/optistruct/optistruct"'
             ],
         )
 
@@ -59,3 +61,26 @@ class test_script_builder(unittest.TestCase):
         self.assertEqual(tcl_commands[start_index + 1], f"*writefile {my_path} 1")
         self.assertEqual(tcl_commands[start_index + 2], "*quit 1")
         self.assertEqual(tcl_commands[start_index + 3], "exit")
+
+    def test_write_rods(self):
+        Element(1, "CTETRA", [1, 2, 3, 4])
+        script_builder = ScriptBuilder()
+        script_builder.write_tcl_create_rods()
+        self.assertIn(f'*rod 1 2 "property_{1}"', script_builder.tcl_commands)
+        self.assertIn(f'*rod 2 3 "property_{1}"', script_builder.tcl_commands)
+        self.assertIn(f'*rod 1 3 "property_{1}"', script_builder.tcl_commands)
+        self.assertIn(f'*rod 1 4 "property_{1}"', script_builder.tcl_commands)
+        self.assertIn(f'*rod 2 4 "property_{1}"', script_builder.tcl_commands)
+        self.assertIn(f'*rod 3 4 "property_{1}"', script_builder.tcl_commands)
+
+    def test_write_tcl_create_material(self):
+        script_builder = ScriptBuilder()
+        material_name = "Material1"
+        material = Material(material_name)
+        material.add_linear_material_properties(210000.0, 0.3, 7.85e-9)
+        script_builder.write_tcl_create_Material_Property_Component(material, 0.5)
+
+        self.assertIn(
+            f'*createentity mats cardimage=MAT1 includeid=0 name="{material_name}"',
+            script_builder.tcl_commands,
+        )

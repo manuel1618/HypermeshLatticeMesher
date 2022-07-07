@@ -3,6 +3,7 @@ Main method of the CLI which is done as a CLI with Typer.
 """
 import os
 import typer
+from hypermesh_lattice_mesher.datastructure.materials import Material
 
 from hypermesh_lattice_mesher.exporter.hyperworks_starter import HyperworksStarter
 from .exporter.script_builder import ScriptBuilder
@@ -45,8 +46,13 @@ def mesh(file_path: str):
     FEMFileReader(path_fem_file)
 
     scriptbuilder = ScriptBuilder()
-    scriptbuilder.write_tcl_create_Material_Property_Component()
+    # Material
+    material = Material("Material1")
+    material.add_linear_material_properties(210000.0, 0.3, 7.85e-9)
+
+    scriptbuilder.write_tcl_create_Material_Property_Component(material, 0.5)
     scriptbuilder.write_tcl_create_nodes()
+
     scriptbuilder.write_tcl_create_rods()
     scriptbuilder.write_tcl_save_model_and_close(path_hypermesh_dir + "model1.hm")
 
