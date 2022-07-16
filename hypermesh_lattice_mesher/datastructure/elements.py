@@ -248,7 +248,7 @@ class Element1D:
     id_counter = 1
     elements: Dict(int, "Element1D") = {}
     elements_by_property_id: Dict(int, List["Element1D"]) = {}
-    node_pairs: Set(Tuple) = []
+    node_pairs: Set(Tuple) = set()
 
     def __init__(self, config: ElementConfig, property_id: int, nodes: Tuple) -> str:
 
@@ -261,7 +261,8 @@ class Element1D:
         if (self.node1, self.node2) not in Element1D.node_pairs:
             Element1D.elements[self.id_] = self
             Element1D.id_counter += 1
-            Element1D.node_pairs.append((self.node1, self.node2))
+            connection = (self.node1, self.node2)
+            Element1D.node_pairs.add(connection)
 
         if property_id not in Element1D.elements_by_property_id:
             Element1D.elements_by_property_id[property_id] = []
@@ -273,8 +274,8 @@ class Element1D:
         Resets all elements to empty list
         """
         Element1D.elements.clear()
-        Element1D.elements_by_property_id = {}
-        Element1D.node_pairs = []
+        Element1D.elements_by_property_id.clear()
+        Element1D.node_pairs.clear()
 
     def get_femFile_representation(self):
         """

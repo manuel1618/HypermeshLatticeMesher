@@ -85,7 +85,11 @@ class ScriptBuilderFEMFile:
         Element.create_Rod_Elements(ConnectionType["FULL"])
         for key, elements in Element1D.elements_by_property_id.items():
             self.fem_file_lines_lattice.append(f"$HMCOMP ID                     {key}")
+            i = 1
             for rodElement in elements:
+                if i % 500 == 0:
+                    print(f"{i} of {len(elements)}")
+                i += 1
                 self.fem_file_lines_lattice.append(
                     f"{rodElement.config.name},{rodElement.id_},"
                     + f"{rodElement.property_id},{rodElement.node1},{rodElement.node2},"
