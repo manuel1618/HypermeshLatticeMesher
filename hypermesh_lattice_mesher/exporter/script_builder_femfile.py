@@ -27,7 +27,7 @@ class ScriptBuilderFEMFile:
     def __remove_3d_nodes_and_element_lines(self):
         last_line_ignored = False
         for line in self.fem_file_lines_3D:
-            if not ignore_line(line, last_line_ignored):
+            if not self.ignore_line(line, last_line_ignored):
                 self.fem_file_lines_3D_reduced.append(line)
                 last_line_ignored = False
             else:
@@ -37,7 +37,7 @@ class ScriptBuilderFEMFile:
         """
         Lazy Implementation (just the meshing is done right now)
         """
-        for i, line in enumerate(self.fem_file_lines_3D_reduced):
+        for _, line in enumerate(self.fem_file_lines_3D_reduced):
             if "$$  GRID Data" in line:
                 del self.fem_file_lines_lattice[-1]
                 self.__append_nodes()
@@ -83,24 +83,31 @@ class ScriptBuilderFEMFile:
         self.fem_file_lines_lattice.append("$$  CROD Elements")
         self.fem_file_lines_lattice.append("$$")
         Element.create_Rod_Elements(ConnectionType["FULL"])
-        for key in Element1D.elements_by_property_id.keys():
+        for key, elements in Element1D.elements_by_property_id.items():
             self.fem_file_lines_lattice.append(f"$HMCOMP ID                     {key}")
-            elements = Element1D.elements_by_property_id[key]
             for rodElement in elements:
                 self.fem_file_lines_lattice.append(
-                    f"{rodElement.config.name},{rodElement.id_},{rodElement.property_id},{rodElement.node1},{rodElement.node2},"
+                    f"{rodElement.config.name},{rodElement.id_},"
+                    + f"{rodElement.property_id},{rodElement.node1},{rodElement.node2},"
                 )
         print("Rods written")
 
-
-def ignore_line(line: str, last_line_ignored: bool) -> bool:
-    if line.startswith("GRID"):
-        return True
-    for elemConfig in ElementConfig:
-        if line.startswith(elemConfig.name):
+    def ignore_line(self, line: str, last_line_ignored: bool) -> bool:
+        """
+        Decides if the line is to be added to the reduced list of the class
+        Parameters:
+        ----------
+        last_line_ignored:bool
+          if the last line was ignored -follower lines will be ignored too
+          (they usually start with a +)
+        """
+        if line.startswith("GRID"):
             return True
-    if line.startswith("$HMCOMP ID"):
-        return True
-    if last_line_ignored and line.startswith("+"):
-        return True
-    return False
+        for elemConfig in ElementConfig:
+            if line.startswith(elemConfig.name):
+                return True
+        if line.startswith("$HMCOMP ID"):
+            return True
+        if last_line_ignored and line.startswith("+"):
+            return True
+        return False

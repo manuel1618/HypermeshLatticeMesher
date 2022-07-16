@@ -89,4 +89,8 @@ class FEMFileReader:
 
 
 def is_element(line_content: List[str]):
+    """
+    Checks if the line contains any of the known
+    element configss
+    """
     return line_content[0] in ElementConfig.__members__

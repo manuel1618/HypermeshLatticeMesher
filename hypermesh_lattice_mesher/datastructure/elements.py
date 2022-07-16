@@ -57,7 +57,7 @@ class Element:
         Element.elements[id_] = self
         self.id_ = id_
         self.component_id = component_id
-        if component_id not in Element.elements_by_component_id.keys():
+        if component_id not in Element.elements_by_component_id:
             Element.elements_by_component_id[component_id] = []
         Element.elements_by_component_id[component_id].append(self)
 
@@ -224,13 +224,19 @@ class Element:
                     connections.append((node1, node2))
 
     @classmethod
-    def create_Rod_Elements(self, connection_type: ConnectionType):
-        # Get all the rod connection node pairs
-        for component_id in Element.elements_by_component_id.keys():
-            for element in Element.elements_by_component_id[component_id]:
+    def create_Rod_Elements(cls, connection_type: ConnectionType):
+        """
+        Creates Rod Elements based on 3D Element and connection Type
+        Parameters:
+        ----------
+        connection_type: ConnectionType
+          How the lattice Structures are to be found
+        """
+        for comp_id, elements in Element.elements_by_component_id.items():
+            for element in elements:
                 connections = element.get_lattice_connections(connection_type)
                 for connection in connections:
-                    Element1D(ElementConfig["CROD"], component_id, connection)
+                    Element1D(ElementConfig["CROD"], comp_id, connection)
 
 
 class Element1D:
@@ -242,7 +248,7 @@ class Element1D:
     id_counter = 1
     elements: Dict(int, "Element1D") = {}
     elements_by_property_id: Dict(int, List["Element1D"]) = {}
-    node_pairs: Set(Tuple) = set()
+    node_pairs: Set(Tuple) = []
 
     def __init__(self, config: ElementConfig, property_id: int, nodes: Tuple) -> str:
 
@@ -255,9 +261,9 @@ class Element1D:
         if (self.node1, self.node2) not in Element1D.node_pairs:
             Element1D.elements[self.id_] = self
             Element1D.id_counter += 1
-            Element1D.node_pairs.add((self.node1, self.node2))
+            Element1D.node_pairs.append((self.node1, self.node2))
 
-        if property_id not in Element1D.elements_by_property_id.keys():
+        if property_id not in Element1D.elements_by_property_id:
             Element1D.elements_by_property_id[property_id] = []
         Element1D.elements_by_property_id[property_id].append(self)
 
@@ -268,7 +274,7 @@ class Element1D:
         """
         Element1D.elements.clear()
         Element1D.elements_by_property_id = {}
-        node_pairs = []
+        Element1D.node_pairs = []
 
     def get_femFile_representation(self):
         """

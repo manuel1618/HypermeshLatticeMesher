@@ -26,7 +26,7 @@ class TestSciptBuilderTCL(unittest.TestCase):
     $$                      Case Control Cards                                      $
     $$------------------------------------------------------------------------------$
     $$--------------------------------------------------------------
-    $$ HYPERMESH TAGS 
+    $$ HYPERMESH TAGS
     $$--------------------------------------------------------------
     $$BEGIN TAGS
     $$END TAGS
@@ -43,7 +43,7 @@ class TestSciptBuilderTCL(unittest.TestCase):
     GRID,2,,-10.313008308411,-7.0365853309631,-35.275356292725,
     $$
     $$  CHEXA Elements: First Order
-    $$       
+    $$
     $HMCOMP ID                     1
     CHEXA,31,0,25,28,23,24,45,46,
     +,47,48,
@@ -54,7 +54,7 @@ class TestSciptBuilderTCL(unittest.TestCase):
     $$------------------------------------------------------------------------------$
     $$    HyperMesh name and color information for generic components               $
     $$------------------------------------------------------------------------------$
-    $HMNAME COMP                   1"auto1" 
+    $HMNAME COMP                   1"auto1"
     $HWCOLOR COMP                  1       5
     $
 
