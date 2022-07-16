@@ -5,7 +5,7 @@
 
 from __future__ import annotations
 from enum import Enum
-from typing import List, Tuple, Dict
+from typing import List, Set, Tuple, Dict
 
 
 class ConnectionType(Enum):
@@ -18,6 +18,17 @@ class ConnectionType(Enum):
 
     SIMPLE = 1
     FULL = 2
+
+
+class ElementConfig(Enum):
+    """
+    To simplify the process for all Element Configs, its is put in as an enumeration.
+    Am able to loop for all and dont have to change the code again
+    """
+
+    CHEXA = 1
+    CTETRA = 2
+    CROD = 3
 
 
 class Element:
@@ -35,13 +46,21 @@ class Element:
     """
 
     elements: Dict(int, "Element") = {}
+    elements_by_component_id: Dict(int, List["Element"]) = {}
 
-    def __init__(self, id_: int, config: str, nodes: List[int]) -> None:
+    def __init__(
+        self, id_: int, component_id: int, config: ElementConfig, nodes: List[int]
+    ) -> None:
         """
         Initializes the element with the above mentioned parameters
         """
         Element.elements[id_] = self
         self.id_ = id_
+        self.component_id = component_id
+        if component_id not in Element.elements_by_component_id.keys():
+            Element.elements_by_component_id[component_id] = []
+        Element.elements_by_component_id[component_id].append(self)
+
         self.config = config
         self.nodes = nodes
 
@@ -51,6 +70,7 @@ class Element:
         Resets all elements to empty list
         """
         Element.elements.clear()
+        Element.elements_by_component_id = {}
 
     def get_lattice_connections(self, connection_type: ConnectionType) -> List[Tuple]:
         """
@@ -64,9 +84,9 @@ class Element:
         returns: -> List[Tuple] of the connections pairs (node ids)
         """
 
-        if self.config == "CHEXA":
+        if self.config == ElementConfig["CHEXA"]:
             return self.__get_lattice_connections_hex(connection_type)
-        if self.config == "CTETRA":
+        if self.config == ElementConfig["CTETRA"]:
             return self.__get_lattice_connections_tet(connection_type)
         return None
 
@@ -202,3 +222,58 @@ class Element:
                 node2 = max(self.nodes[n_id], self.nodes[node_ids[i + 1]])
                 if (node1, node2) not in connections:
                     connections.append((node1, node2))
+
+    @classmethod
+    def create_Rod_Elements(self, connection_type: ConnectionType):
+        # Get all the rod connection node pairs
+        for component_id in Element.elements_by_component_id.keys():
+            for element in Element.elements_by_component_id[component_id]:
+                connections = element.get_lattice_connections(connection_type)
+                for connection in connections:
+                    Element1D(ElementConfig["CROD"], component_id, connection)
+
+
+class Element1D:
+    """
+    Class for modeling 1D elements - RODs for now
+    """
+
+    id_ = 0
+    id_counter = 1
+    elements: Dict(int, "Element1D") = {}
+    elements_by_property_id: Dict(int, List["Element1D"]) = {}
+    node_pairs: Set(Tuple) = set()
+
+    def __init__(self, config: ElementConfig, property_id: int, nodes: Tuple) -> str:
+
+        self.config = config
+        self.id_ = Element1D.id_counter
+        self.property_id = property_id
+        self.node1 = min(nodes)
+        self.node2 = max(nodes)
+
+        if (self.node1, self.node2) not in Element1D.node_pairs:
+            Element1D.elements[self.id_] = self
+            Element1D.id_counter += 1
+            Element1D.node_pairs.add((self.node1, self.node2))
+
+        if property_id not in Element1D.elements_by_property_id.keys():
+            Element1D.elements_by_property_id[property_id] = []
+        Element1D.elements_by_property_id[property_id].append(self)
+
+    @classmethod
+    def reset(cls):
+        """
+        Resets all elements to empty list
+        """
+        Element1D.elements.clear()
+        Element1D.elements_by_property_id = {}
+        node_pairs = []
+
+    def get_femFile_representation(self):
+        """
+        For creating the .fem file the str representation is given
+        """
+        # example: CROD,10,1,73,74,
+        return f"{self.config.name},{self.id_},{self.property_id},\
+            {self.node1},{self.node2}"

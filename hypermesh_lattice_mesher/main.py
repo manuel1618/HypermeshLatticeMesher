@@ -6,7 +6,10 @@ import typer
 from hypermesh_lattice_mesher.datastructure.materials import Material
 
 from hypermesh_lattice_mesher.exporter.hyperworks_starter import HyperworksStarter
-from .exporter.script_builder import ScriptBuilder
+from hypermesh_lattice_mesher.exporter.script_builder_femfile import (
+    ScriptBuilderFEMFile,
+)
+from .exporter.script_builder_hypermesh_tcl import ScriptBuilder
 from .importer.fem_file_reader import FEMFileReader
 
 app = typer.Typer()
@@ -63,6 +66,33 @@ def mesh(file_path: str):
 
     # Run Hypermesh in batch to save time
     hyperworks_starter.runHyperMesh(True, False)
+
+
+@app.command()
+def meshFEMFile(file_path: str):
+    """Initializes the main Instane
+
+    Parameters
+    ----------
+    path_fem_file : str
+        The file location of the .fem File with 3D Elements in it
+
+    Returns
+    -------"""
+    if file_path == "":
+        path_fem_file = (
+            os.getcwd().replace("\\", "/")
+            + "/hypermesh_lattice_mesher/data/femFiles/smallModel.fem"
+        )
+    else:
+        path_fem_file = file_path.replace("\\", "/")
+
+    path_hypermesh_dir = (
+        os.getcwd().replace("\\", "/") + "/hypermesh_lattice_mesher/exporter/hypermesh/"
+    )
+
+    scriptBuilder = ScriptBuilderFEMFile(FEMFileReader(path_fem_file))
+    scriptBuilder.insert_lattice_data_and_export(path_hypermesh_dir + "mode1Direct.fem")
 
 
 @app.callback()

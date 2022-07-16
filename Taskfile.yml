@@ -33,4 +33,5 @@ tasks:
         python -m poetry run pytest \
         --cov-report html:cov_html \
         --cov-report term:skip-covered \
-        --cov=hypermesh_lattice_mesher
+        --cov=hypermesh_lattice_mesher \
+        --cov-report=term-missing

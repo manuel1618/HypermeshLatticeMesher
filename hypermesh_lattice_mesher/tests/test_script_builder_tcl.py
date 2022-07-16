@@ -1,12 +1,12 @@
 import unittest
-from hypermesh_lattice_mesher.datastructure.elements import Element
+from hypermesh_lattice_mesher.datastructure.elements import Element, ElementConfig
 from hypermesh_lattice_mesher.exporter.hyperworks_starter import HyperworksStarter
-from hypermesh_lattice_mesher.exporter.script_builder import ScriptBuilder
+from hypermesh_lattice_mesher.exporter.script_builder_hypermesh_tcl import ScriptBuilder
 from hypermesh_lattice_mesher.datastructure.nodes import Node
 from hypermesh_lattice_mesher.datastructure.materials import Material
 
 
-class test_script_builder(unittest.TestCase):
+class TestSciptBuilderTCL(unittest.TestCase):
     def test_init_optistruct(self):
         scriptBuilder = ScriptBuilder()
         self.assertEqual(
@@ -63,7 +63,7 @@ class test_script_builder(unittest.TestCase):
         self.assertEqual(tcl_commands[start_index + 3], "exit")
 
     def test_write_rods(self):
-        Element(1, "CTETRA", [1, 2, 3, 4])
+        Element(1, 1, ElementConfig["CTETRA"], [1, 2, 3, 4])
         script_builder = ScriptBuilder()
         script_builder.write_tcl_create_rods()
         self.assertIn(f'*rod 1 2 "property_{1}"', script_builder.tcl_commands)

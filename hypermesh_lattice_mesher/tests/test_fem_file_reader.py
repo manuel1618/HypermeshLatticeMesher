@@ -1,7 +1,7 @@
 import unittest
 from textwrap import dedent
 from unittest.mock import patch, mock_open
-from hypermesh_lattice_mesher.datastructure.elements import Element
+from hypermesh_lattice_mesher.datastructure.elements import Element, ElementConfig
 from hypermesh_lattice_mesher.datastructure.nodes import Node
 from hypermesh_lattice_mesher.importer.fem_file_reader import FEMFileReader
 
@@ -22,6 +22,7 @@ class TestFEMFileReader(unittest.TestCase):
 
     DATA_ELEMENT_HEX8 = dedent(
         """
+        $HMCOMP ID                     1
     CHEXA,75,0,149,155,156,150,151,157,
     +,158,152,
     """
@@ -29,6 +30,7 @@ class TestFEMFileReader(unittest.TestCase):
 
     DATA_ELEMENT_HEX20 = dedent(
         """
+        $HMCOMP ID                     1
     CHEXA,37,0,40,42,16,17,63,64,
     +,65,66,348,257,256,261,349,356,
     +,258,263,434,439,443,435,
@@ -37,12 +39,14 @@ class TestFEMFileReader(unittest.TestCase):
 
     DATA_ELEMENT_TET4 = dedent(
         """
+        $HMCOMP ID                     1
     CTETRA,1,0,1,2,3,4,
     """
     ).strip()
 
     DATA_ELEMENT_TET10 = dedent(
         """
+        $HMCOMP ID                     1
     CTETRA,1,0,1,2,3,4,5,6,
     +,7,8,9,10,
     """
@@ -86,7 +90,8 @@ class TestFEMFileReader(unittest.TestCase):
         self.assertEqual(len(list(Element.elements.values())), 1)
         element = list(Element.elements.values())[0]
         self.assertEqual(element.id_, 75)
-        self.assertEqual(element.config, "CHEXA")
+        self.assertEqual(element.component_id, 1)
+        self.assertEqual(element.config, ElementConfig["CHEXA"])
         self.assertEqual(len(element.nodes), 8)
         self.assertEqual(
             element.nodes,
@@ -101,7 +106,8 @@ class TestFEMFileReader(unittest.TestCase):
         self.assertEqual(len(list(Element.elements.values())), 1)
         element = list(Element.elements.values())[0]
         self.assertEqual(element.id_, 37)
-        self.assertEqual(element.config, "CHEXA")
+        self.assertEqual(element.component_id, 1)
+        self.assertEqual(element.config, ElementConfig["CHEXA"])
         self.assertEqual(len(element.nodes), 20)
         self.assertEqual(
             element.nodes,
@@ -137,7 +143,8 @@ class TestFEMFileReader(unittest.TestCase):
         self.assertEqual(len(list(Element.elements.values())), 1)
         element = list(Element.elements.values())[0]
         self.assertEqual(element.id_, 1)
-        self.assertEqual(element.config, "CTETRA")
+        self.assertEqual(element.component_id, 1)
+        self.assertEqual(element.config, ElementConfig["CTETRA"])
         self.assertEqual(len(element.nodes), 4)
         self.assertEqual(
             element.nodes,
@@ -157,7 +164,8 @@ class TestFEMFileReader(unittest.TestCase):
         self.assertEqual(len(list(Element.elements.values())), 1)
         element = list(Element.elements.values())[0]
         self.assertEqual(element.id_, 1)
-        self.assertEqual(element.config, "CTETRA")
+        self.assertEqual(element.component_id, 1)
+        self.assertEqual(element.config, ElementConfig["CTETRA"])
         self.assertEqual(len(element.nodes), 10)
         self.assertEqual(
             element.nodes,
