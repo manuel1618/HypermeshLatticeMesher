@@ -32,7 +32,7 @@ def mesh(file_path: str):
     if file_path == "":
         path_fem_file = (
             os.getcwd().replace("\\", "/")
-            + "/hypermesh_lattice_mesher/data/femFiles/smallModel.fem"
+            + "/hypermesh_lattice_mesher/data/import/femFiles/smallModel.fem"
         )
     else:
         path_fem_file = file_path.replace("\\", "/")
@@ -83,7 +83,7 @@ def meshFEMFile(file_path: str):
     if file_path == "":
         path_fem_file = (
             os.getcwd().replace("\\", "/")
-            + "/hypermesh_lattice_mesher/data/femFiles/smallModel.fem"
+            + "/hypermesh_lattice_mesher/data/import/femFiles/smallModel.fem"
         )
     else:
         path_fem_file = file_path.replace("\\", "/")
