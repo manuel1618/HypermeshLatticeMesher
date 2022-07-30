@@ -134,7 +134,7 @@ class HyperworksStarter:
             process_open = [self.PATH_HYPERVIEW, "-tcl", self.script_path]
 
         with subprocess.Popen(process_open, startupinfo=startupinfo) as process:
-            print("Waiting for Hypermesh Process to Finish")
+            print("Waiting for Hyperview Process to Finish")
             process.wait()
 
         # batch needs special attention:

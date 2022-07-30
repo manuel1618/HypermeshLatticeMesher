@@ -72,28 +72,3 @@ class ScriptBuilderHyperview:
         """
         # TODO
         path_to_h3d_file = path_to_h3d_file.replace("\\", "/")
-
-
-if __name__ == "__main__":
-    # local testing only
-    scriptBuilder = ScriptBuilderHyperview(
-        r"D:\GITHUB\HypermeshLatticeMesher\HypermeshLatticeMesher\exporter\hypermesh"
-    )
-    scriptBuilder.write_tcl_read_rod_stress(
-        r"D:\GITHUB\HypermeshLatticeMesher\HypermeshLatticeMesher\exporter\hypermesh\
-            \model1.h3d",
-    )
-
-    hyperworksStarter = HyperworksStarter(
-        r"D:\GITHUB\HypermeshLatticeMesher\HypermeshLatticeMesher\exporter\hypermesh",
-        "model1Hyperview",
-    )
-    hyperworksStarter.write_script(
-        scriptBuilder.tcl_commands,
-        r"D:\GITHUB\HypermeshLatticeMesher\HypermeshLatticeMesher\exporter\hypermesh",
-        False,
-        "",
-    )
-
-    # Run Hypermesh in batch to save time
-    hyperworksStarter.runHyperview(True, True)
