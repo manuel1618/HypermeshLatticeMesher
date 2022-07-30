@@ -15,9 +15,12 @@ from .importer.fem_file_reader import FEMFileReader
 app = typer.Typer()
 
 
+@DeprecationWarning
 @app.command()
 def mesh(file_path: str):
-    """Initializes the main Instane
+    """
+    Meshes the .fem file by using tcl commands in hypermesh. Sort of deprecated.
+    It stays because may be necessary for later use for more complicated use cases
 
     Parameters
     ----------
@@ -35,11 +38,13 @@ def mesh(file_path: str):
         path_fem_file = file_path.replace("\\", "/")
 
     path_tcl_dir = (
-        os.getcwd().replace("\\", "/") + "/hypermesh_lattice_mesher/exporter/TCLScript/"
+        os.getcwd().replace("\\", "/")
+        + "/hypermesh_lattice_mesher/data/export/scripts/"
     )
 
     path_hypermesh_dir = (
-        os.getcwd().replace("\\", "/") + "/hypermesh_lattice_mesher/exporter/hypermesh/"
+        os.getcwd().replace("\\", "/")
+        + "/hypermesh_lattice_mesher/data/export/hypermesh/"
     )
 
     # path_hyperview_dir = (
@@ -70,7 +75,8 @@ def mesh(file_path: str):
 
 @app.command()
 def meshFEMFile(file_path: str):
-    """Initializes the main Instane
+    """
+    Meshtes the .fem file directly, no tcl commands for hypermesh are generated
 
     Parameters
     ----------
@@ -88,7 +94,8 @@ def meshFEMFile(file_path: str):
         path_fem_file = file_path.replace("\\", "/")
 
     path_hypermesh_dir = (
-        os.getcwd().replace("\\", "/") + "/hypermesh_lattice_mesher/exporter/hypermesh/"
+        os.getcwd().replace("\\", "/")
+        + "/hypermesh_lattice_mesher/data/export/hypermesh/"
     )
 
     scriptBuilder = ScriptBuilderFEMFile(FEMFileReader(path_fem_file))
