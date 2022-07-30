@@ -46,11 +46,6 @@ def mesh(file_path: str):
         os.getcwd().replace("\\", "/")
         + "/hypermesh_lattice_mesher/data/export/hypermesh/"
     )
-
-    # path_hyperview_dir = (
-    #     os.getcwd().replace("\\", "/") + "/hypermesh_lattice_mesher/data/hyperview/"
-    # )
-
     FEMFileReader(path_fem_file)
 
     scriptbuilder = ScriptBuilder()
