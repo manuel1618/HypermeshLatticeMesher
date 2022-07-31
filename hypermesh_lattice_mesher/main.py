@@ -101,7 +101,7 @@ def meshFEMFile(file_path: str):
 
 
 @app.command()
-def readStressFromH3D(file_path: str):
+def readStress(file_path: str):
     """
     Reads the axial sterss values from an .h3d file and saves a file of those values
 
@@ -135,6 +135,54 @@ def readStressFromH3D(file_path: str):
 
     scriptBuilder = ScriptBuilderHyperview(path_output_dir)
     scriptBuilder.write_tcl_read_rod_stress(path_h3d_file)
+
+    hyperworksStarter = HyperworksStarter(path_tcl_dir, "modelName")
+    hyperworksStarter.write_script(
+        scriptBuilder.tcl_commands,
+        path_hypermesh_dir,
+        False,
+        "",
+    )
+
+    # Run Hypermesh in batch to save time
+    hyperworksStarter.runHyperview(True, True)
+
+
+@app.command()
+def readDisplacement(file_path: str):
+    """
+    Reads the total displacement values from an .h3d file and saves a file of those values
+
+    Parameters
+    ----------
+    file_path : str
+       path to the h3d file to be read
+
+    Returns
+    -------
+    """
+
+    if file_path == "":
+        path_h3d_file = (
+            os.getcwd().replace("\\", "/")
+            + "/hypermesh_lattice_mesher/data/import/hyperview/model1.h3d"
+        )
+    else:
+        path_h3d_file = file_path.replace("\\", "/")
+    path_tcl_dir = (
+        os.getcwd().replace("\\", "/")
+        + "/hypermesh_lattice_mesher/data/export/scripts/"
+    )
+    path_hypermesh_dir = (
+        os.getcwd().replace("\\", "/")
+        + "/hypermesh_lattice_mesher/data/export/hypermesh/"
+    )
+    path_output_dir = (
+        os.getcwd().replace("\\", "/") + "/hypermesh_lattice_mesher/data/export/values/"
+    )
+
+    scriptBuilder = ScriptBuilderHyperview(path_output_dir)
+    scriptBuilder.write_tcl_read_node_displacements(path_h3d_file)
 
     hyperworksStarter = HyperworksStarter(path_tcl_dir, "modelName")
     hyperworksStarter.write_script(

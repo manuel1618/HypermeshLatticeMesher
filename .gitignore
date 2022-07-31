@@ -8,6 +8,8 @@ hypermesh_lattice_mesher/data/test/*
 !hypermesh_lattice_mesher/data/test/.gitkeep
 hypermesh_lattice_mesher/data/import/hyperview/*
 !hypermesh_lattice_mesher/data/import/hyperview/.gitkeep
+hypermesh_lattice_mesher/data/export/values/*
+!hypermesh_lattice_mesher/data/export/values/.gitkeep
 
 
 *.tcl
@@ -140,3 +142,4 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
