@@ -3,9 +3,6 @@ Hyperview Script Module
 """
 
 
-from hypermesh_lattice_mesher.exporter.hyperworks_starter import HyperworksStarter
-
-
 class ScriptBuilderHyperview:
     """
     Script building class (tcl) for hypermesh
