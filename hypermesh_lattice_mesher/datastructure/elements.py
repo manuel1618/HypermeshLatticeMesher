@@ -39,6 +39,8 @@ class Element:
     ---------
     id_: int
         the id of the element
+    component_id : int
+        component in which the element belongs (hypermesh component)
     config : str
         config for the element
     nodes : List[Integer]
@@ -149,7 +151,7 @@ class Element:
 
             return connections
 
-        print("Unknown element type: " + self.config)
+        print(f"Unknown element type or number of nodes is wrong: {self.config}")
         print(f"Number Of Nodes: {len(self.nodes)}")
         return None
 
@@ -167,6 +169,7 @@ class Element:
             if connection_type == ConnectionType["FULL"]:
                 # not implemented yet # TODO
                 pass
+            return connections
 
         if len(self.nodes) == 10:
             # basis
@@ -186,7 +189,12 @@ class Element:
             if connection_type == ConnectionType["FULL"]:
                 # not implemented yet #TODO
                 pass
-        return connections
+
+            return connections
+
+        print(f"Unknown element type or number of nodes is wrong: {self.config}")
+        print(f"Number Of Nodes: {len(self.nodes)}")
+        return None
 
     def __append_connection(
         self, connections: List[Tuple], node_ids: List, closed: bool
@@ -276,11 +284,14 @@ class Element1D:
         Element1D.elements.clear()
         Element1D.elements_by_property_id.clear()
         Element1D.node_pairs.clear()
+        Element1D.id_counter = 1
 
     def get_femFile_representation(self):
         """
         For creating the .fem file the str representation is given
         """
         # example: CROD,10,1,73,74,
-        return f"{self.config.name},{self.id_},{self.property_id},\
-            {self.node1},{self.node2}"
+        return (
+            f"{self.config.name},{self.id_},{self.property_id},{self.node1}"
+            f",{self.node2}"
+        )

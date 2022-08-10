@@ -3,6 +3,7 @@ import unittest
 from hypermesh_lattice_mesher.datastructure.elements import (
     ConnectionType,
     Element,
+    Element1D,
     ElementConfig,
 )
 
@@ -59,3 +60,15 @@ class TestElement(unittest.TestCase):
         element = Element(1, 1, "Foo", [1, 2])
         connections = element.get_lattice_connections(ConnectionType["SIMPLE"])
         self.assertEqual(connections, None)
+        element = Element(1, 1, ElementConfig["CTETRA"], [1, 2, 3])  # faulty element
+        connections = element.get_lattice_connections(ConnectionType["SIMPLE"])
+        self.assertEqual(connections, None)
+        element = Element(1, 1, ElementConfig["CHEXA"], [1, 2, 3])  # faulty element
+        connections = element.get_lattice_connections(ConnectionType["SIMPLE"])
+        self.assertEqual(connections, None)
+
+    def test_fem_file_rep(self):
+        Element1D.reset()
+        element = Element1D(ElementConfig["CTETRA"], 4, (1, 2))
+        fem_rep = element.get_femFile_representation()
+        self.assertEqual(fem_rep.strip(), "CTETRA,1,4,1,2")
