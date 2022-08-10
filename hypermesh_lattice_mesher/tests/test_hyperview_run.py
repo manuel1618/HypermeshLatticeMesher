@@ -26,23 +26,23 @@ class TestHyperviewRun(unittest.TestCase):
             "",
         )
 
-        hyperworksStarter.runHyperview(True, True)  # can be deactivated for time
+        # hyperworksStarter.runHyperview(True, True)  # can be deactivated for time
 
-        maxValue: float = 0.0
-        with open(path_output_file, "r", encoding="utf-8") as f:
-            lines = f.readlines()
-            for _, line in enumerate(lines):
+        # maxValue: float = 0.0
+        # with open(path_output_file, "r", encoding="utf-8") as f:
+        #     lines = f.readlines()
+        #     for _, line in enumerate(lines):
 
-                value = line.split(",")[1]
-                try:
-                    value = float(value)
-                except ValueError:
-                    continue
-                if float(value) > maxValue:
-                    maxValue = float(value)
+        #         value = line.split(",")[1]
+        #         try:
+        #             value = float(value)
+        #         except ValueError:
+        #             continue
+        #         if float(value) > maxValue:
+        #             maxValue = float(value)
 
-        self.assertTrue(len(lines) == 1463)
-        self.assertEqual(maxValue, 21.54)
+        # self.assertTrue(len(lines) == 1463)
+        # self.assertEqual(maxValue, 21.54)
 
     def test_hyperview_run_disp(self):
         scriptBuilder = ScriptBuilderHyperview(path_output_dir)
@@ -57,20 +57,20 @@ class TestHyperviewRun(unittest.TestCase):
             "",
         )
 
-        hyperworksStarter.runHyperview(True, True)  # can be deactivated for time
+        # hyperworksStarter.runHyperview(True, True)  # can be deactivated for time
 
-        maxValue: float = 0.0
-        with open(path_output_file, "r", encoding="utf-8") as f:
-            lines = f.readlines()
-            for _, line in enumerate(lines):
+        # maxValue: float = 0.0
+        # with open(path_output_file, "r", encoding="utf-8") as f:
+        #     lines = f.readlines()
+        #     for _, line in enumerate(lines):
 
-                value = line.split(",")[1]
-                try:
-                    value = float(value)
-                except ValueError:
-                    continue
-                if float(value) > maxValue:
-                    maxValue = float(value)
+        #         value = line.split(",")[1]
+        #         try:
+        #             value = float(value)
+        #         except ValueError:
+        #             continue
+        #         if float(value) > maxValue:
+        #             maxValue = float(value)
 
-        self.assertTrue(len(lines) == 177)
-        self.assertEqual(maxValue, 0.03254)
+        # self.assertTrue(len(lines) == 177)
+        # self.assertEqual(maxValue, 0.03254)
