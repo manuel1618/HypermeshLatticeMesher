@@ -52,8 +52,8 @@ class ScriptBuilderHyperview:
         self.tcl_commands.append("myModel GetResultCtrlHandle myResult")
         self.tcl_commands.append("set current [myResult GetCurrentSubcase]")
         self.tcl_commands.append(
-            "myResult SetCurrentSimulation [expr [myResult GetNumberOfSimulations\
-                 $current]-1]"
+            "myResult SetCurrentSimulation [expr [myResult GetNumberOfSimulations "
+            + "$current]-1]"
         )
         self.tcl_commands.append("myResult GetContourCtrlHandle myContour")
         self.tcl_commands.append("myContour SetDataType {Element Stresses (1D)}")
@@ -93,8 +93,8 @@ class ScriptBuilderHyperview:
         self.tcl_commands.append("myModel GetResultCtrlHandle myResult")
         self.tcl_commands.append("set current [myResult GetCurrentSubcase]")
         self.tcl_commands.append(
-            "myResult SetCurrentSimulation [expr [myResult GetNumberOfSimulations\
-                 $current]-1]"
+            "myResult SetCurrentSimulation [expr [myResult GetNumberOfSimulations "
+            + "$current]-1]"
         )
         self.tcl_commands.append("myResult GetContourCtrlHandle myContour")
         self.tcl_commands.append("myContour SetDataType Displacement")
