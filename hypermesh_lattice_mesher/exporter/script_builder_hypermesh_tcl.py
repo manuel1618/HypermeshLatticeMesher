@@ -1,3 +1,4 @@
+from typing import List
 from hypermesh_lattice_mesher.datastructure.nodes import Node
 from hypermesh_lattice_mesher.datastructure.elements import Element, ConnectionType
 from hypermesh_lattice_mesher.datastructure.materials import Material
@@ -35,6 +36,67 @@ class ScriptBuilder:
             )
 
         print("Nodes written")
+
+    def write_tcl_create_materials_properties(
+        self, materials: List[Material], diameter: float
+    ):
+        """
+        Create multiple materials and properties
+        """
+        self.tcl_commands.append(
+            f'*createentity beamsectcols includeid=0 name="beamsectcol_{1}"'
+        )
+        beamsection_name = f"beamsection_{1}"
+        self.tcl_commands.append(
+            f'*createentity beamsects includeid=0 name="{beamsection_name}"'
+        )
+
+        self.tcl_commands.append(
+            f'*setvalue beamsects name="{beamsection_name}" id={{Beamsections {1}}}'
+        )
+        self.tcl_commands.append(f"*setvalue beamsects id={1} beamsect_dim1={diameter}")
+        self.tcl_commands.append("*clearmark beamsects 1")
+        self.tcl_commands.append(f"*setvalue beamsects id={1} config=2")
+
+        for material in materials:
+            material_name = f"mat_{material.id_}"
+            yngsMdl = material.yngs_module
+            nu = material.nu
+            density = material.density
+            self.tcl_commands.append(
+                f'*createentity mats cardimage=MAT1 includeid=0 name="{material_name}"'
+            )
+            self.tcl_commands.append(
+                f'*setvalue mats name="{material_name}" id={material.id_}'
+            )
+            self.tcl_commands.append(
+                f"*setvalue mats id={material.id_} STATUS=1 1={yngsMdl}"
+            )
+            self.tcl_commands.append(
+                f"*setvalue mats id={material.id_} STATUS=1 3={nu}"
+            )
+            self.tcl_commands.append(
+                f"*setvalue mats id={material.id_} STATUS=1 4={density}"
+            )
+            property_name = f"property_{material.id_}"
+            self.tcl_commands.append(
+                f'*createentity props cardimage=PROD includeid=0 name="{property_name}"'
+            )
+            self.tcl_commands.append(
+                f'*setvalue props name="{property_name}" id={material.id_}'
+            )
+
+            self.tcl_commands.append(
+                f"*setvalue props id={material.id_} materialid={material.id_}"
+            )
+            self.tcl_commands.append(
+                f"*setvalue props id={material.id_} STATUS=2 3179={{beamsects {1}}}"
+            )
+            self.tcl_commands.append(
+                f'*createmark properties 1 "property_{material.id_}"'
+            )
+            self.tcl_commands.append("*syncpropertybeamsectionvalues 1")
+            self.tcl_commands.append('*mergehistorystate "" ""')
 
     def write_tcl_create_Material_Property_Component(
         self, material: Material, diameter: float

@@ -18,7 +18,6 @@ from hypermesh_lattice_mesher.exporter.script_builder_hyperview import (
 app = typer.Typer()
 
 
-@DeprecationWarning
 @app.command()
 def mesh(file_path: str):
     """
@@ -151,7 +150,8 @@ def readStress(file_path: str):
 @app.command()
 def readDisplacement(file_path: str):
     """
-    Reads the total displacement values from an .h3d file and saves a file of those values
+    Reads the total displacement values from an .h3d file and saves a file of those
+    values
 
     Parameters
     ----------
@@ -194,6 +194,47 @@ def readDisplacement(file_path: str):
 
     # Run Hypermesh in batch to save time
     hyperworksStarter.runHyperview(True, True)
+
+
+@app.command()
+def create_materials():
+    """
+    Create multiple materials and assign elmeents to them according to the
+    stress values given in the list
+    TODO - import, delete, sort
+    """
+    # if file_path == "":
+    #     path_fem_file = (
+    #         os.getcwd().replace("\\", "/")
+    #         + "/hypermesh_lattice_mesher/data/import/femFiles/smallModel.fem"
+    #     )
+    # else:
+    #     path_fem_file = file_path.replace("\\", "/")
+
+    path_tcl_dir = (
+        os.getcwd().replace("\\", "/")
+        + "/hypermesh_lattice_mesher/data/export/scripts/"
+    )
+
+    path_hypermesh_dir = (
+        os.getcwd().replace("\\", "/")
+        + "/hypermesh_lattice_mesher/data/export/hypermesh/"
+    )
+
+    scriptbuilder = ScriptBuilder()
+    # Material
+    materials = Material.create_materials(10, (20000, 120000), 0.3, 7.85e-9)
+
+    scriptbuilder.write_tcl_create_materials_properties(materials, 0.5)
+    scriptbuilder.write_tcl_save_model_and_close(path_hypermesh_dir + "model_test.hm")
+
+    hyperworks_starter = HyperworksStarter(path_tcl_dir, "model1")
+    hyperworks_starter.write_script(
+        scriptbuilder.tcl_commands, path_hypermesh_dir, False, ""
+    )
+
+    # Run Hypermesh in batch to save time
+    hyperworks_starter.runHyperMesh(True, False)
 
 
 @app.callback()
