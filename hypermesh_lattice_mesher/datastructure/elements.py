@@ -102,12 +102,12 @@ class Element:
         connections = []
         if len(self.nodes) == 8:
             # bottom
-            self.__append_closed_connection(connections, [0, 1, 2, 3], True)
+            self.__append_closed_connection(connections, [0, 1, 2, 3])
             # top
-            self.__append_closed_connection(connections, [4, 5, 6, 7], True)
+            self.__append_closed_connection(connections, [4, 5, 6, 7])
             # vertical1
-            self.__append_closed_connection(connections, [0, 1, 5, 4], True)
-            self.__append_closed_connection(connections, [2, 3, 7, 6], True)
+            self.__append_closed_connection(connections, [0, 1, 5, 4])
+            self.__append_closed_connection(connections, [2, 3, 7, 6])
 
             # FULL
             if connection_type == ConnectionType["FULL"]:
@@ -138,12 +138,12 @@ class Element:
 
             # FULL
             # bottom
-            self.__append_closed_connection(connections, [0, 8, 1, 9, 2, 10, 3, 11], True)
+            self.__append_closed_connection(connections, [0, 8, 1, 9, 2, 10, 3, 11])
             # top
-            self.__append_closed_connection(connections, [4, 16, 5, 17, 6, 18, 7, 19], True)
+            self.__append_closed_connection(connections, [4, 16, 5, 17, 6, 18, 7, 19])
             # vertical
-            self.__append_closed_connection(connections, [0, 8, 1, 13, 5, 16, 4, 12], True)
-            self.__append_closed_connection(connections, [2, 10, 3, 15, 7, 18, 6, 14], True)
+            self.__append_closed_connection(connections, [0, 8, 1, 13, 5, 16, 4, 12])
+            self.__append_closed_connection(connections, [2, 10, 3, 15, 7, 18, 6, 14])
 
             if connection_type == ConnectionType["FULL"]:
                 # TODO
@@ -163,9 +163,9 @@ class Element:
         """
         connections = []
         if len(self.nodes) == 4:
-            self.__append_closed_connection(connections, [0, 1, 2], True)
-            self.__append_closed_connection(connections, [0, 1, 3], True)
-            self.__append_closed_connection(connections, [1, 2, 3], True)
+            self.__append_closed_connection(connections, [0, 1, 2])
+            self.__append_closed_connection(connections, [0, 1, 3])
+            self.__append_closed_connection(connections, [1, 2, 3])
             if connection_type == ConnectionType["FULL"]:
                 # not implemented yet # TODO
                 pass
@@ -197,7 +197,7 @@ class Element:
         return None
 
     def __append_closed_connection(
-        self, connections: List[Tuple], node_ids: List, closed: bool
+        self, connections: List[Tuple], node_ids: List
     ) -> List[Tuple]:
         """
         Helper method to reduce text in this module
