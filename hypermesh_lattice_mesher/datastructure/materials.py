@@ -48,11 +48,12 @@ class Material:
           density for all materials
 
         """
+        (lower_yng, upper_yng) = lower_upper_yng
         materials = [None] * number_of_materials
+        delta = (upper_yng - lower_yng) / (float(number_of_materials) - 1)
         for i in range(number_of_materials):
             material = Material(f"mat_{i}")
-            (lower_yng, upper_yng) = lower_upper_yng
-            yngs = lower_yng + i * (upper_yng - lower_yng) / float(number_of_materials)
+            yngs = lower_yng + i * delta
             print(yngs)
             material.add_linear_material_properties(yngs, nu, density)
             materials[i] = material
@@ -64,6 +65,7 @@ class Material:
         Resets all elements to empty list
         """
         Material.materials.clear()
+        Material.counter = 1
 
     def add_linear_material_properties(
         self, yngs_module: float, nu: float, density: float

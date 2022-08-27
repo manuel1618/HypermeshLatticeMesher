@@ -102,12 +102,12 @@ class Element:
         connections = []
         if len(self.nodes) == 8:
             # bottom
-            self.__append_connection(connections, [0, 1, 2, 3], True)
+            self.__append_closed_connection(connections, [0, 1, 2, 3], True)
             # top
-            self.__append_connection(connections, [4, 5, 6, 7], True)
+            self.__append_closed_connection(connections, [4, 5, 6, 7], True)
             # vertical1
-            self.__append_connection(connections, [0, 1, 5, 4], True)
-            self.__append_connection(connections, [2, 3, 7, 6], True)
+            self.__append_closed_connection(connections, [0, 1, 5, 4], True)
+            self.__append_closed_connection(connections, [2, 3, 7, 6], True)
 
             # FULL
             if connection_type == ConnectionType["FULL"]:
@@ -138,12 +138,12 @@ class Element:
 
             # FULL
             # bottom
-            self.__append_connection(connections, [0, 8, 1, 9, 2, 10, 3, 11], True)
+            self.__append_closed_connection(connections, [0, 8, 1, 9, 2, 10, 3, 11], True)
             # top
-            self.__append_connection(connections, [4, 16, 5, 17, 6, 18, 7, 19], True)
+            self.__append_closed_connection(connections, [4, 16, 5, 17, 6, 18, 7, 19], True)
             # vertical
-            self.__append_connection(connections, [0, 8, 1, 13, 5, 16, 4, 12], True)
-            self.__append_connection(connections, [2, 10, 3, 15, 7, 18, 6, 14], True)
+            self.__append_closed_connection(connections, [0, 8, 1, 13, 5, 16, 4, 12], True)
+            self.__append_closed_connection(connections, [2, 10, 3, 15, 7, 18, 6, 14], True)
 
             if connection_type == ConnectionType["FULL"]:
                 # TODO
@@ -163,9 +163,9 @@ class Element:
         """
         connections = []
         if len(self.nodes) == 4:
-            self.__append_connection(connections, [0, 1, 2], True)
-            self.__append_connection(connections, [0, 1, 3], True)
-            self.__append_connection(connections, [1, 2, 3], True)
+            self.__append_closed_connection(connections, [0, 1, 2], True)
+            self.__append_closed_connection(connections, [0, 1, 3], True)
+            self.__append_closed_connection(connections, [1, 2, 3], True)
             if connection_type == ConnectionType["FULL"]:
                 # not implemented yet # TODO
                 pass
@@ -196,7 +196,7 @@ class Element:
         print(f"Number Of Nodes: {len(self.nodes)}")
         return None
 
-    def __append_connection(
+    def __append_closed_connection(
         self, connections: List[Tuple], node_ids: List, closed: bool
     ) -> List[Tuple]:
         """
@@ -218,13 +218,10 @@ class Element:
         """
         for i, n_id in enumerate(node_ids):
             if i == len(node_ids) - 1:
-                if closed:
-                    node1 = min(self.nodes[n_id], self.nodes[node_ids[0]])
-                    node2 = max(self.nodes[n_id], self.nodes[node_ids[0]])
-                    if (node1, node2) not in connections:
-                        connections.append((node1, node2))
-                else:
-                    break
+                node1 = min(self.nodes[n_id], self.nodes[node_ids[0]])
+                node2 = max(self.nodes[n_id], self.nodes[node_ids[0]])
+                if (node1, node2) not in connections:
+                    connections.append((node1, node2))
             else:
                 node1 = min(self.nodes[n_id], self.nodes[node_ids[i + 1]])
                 node2 = max(self.nodes[n_id], self.nodes[node_ids[i + 1]])
