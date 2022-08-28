@@ -2,7 +2,7 @@
 Main method of the CLI which is done as a CLI with Typer.
 """
 import os
-from typing import Dict, List, Tuple
+from typing import Dict, List
 import typer
 from hypermesh_lattice_mesher.datastructure.materials import Material
 
