@@ -17,12 +17,13 @@ Some notes for better understanding the code in here (mostly for myself)
 
 ### Execute
 
-- run the module via: python -m HypermeshLatticeMesher.HypermeshLatticeMesher
+- run the module via: python -m hypermesh_lattice_mesher.main
 - This is the top module which should contain the main logic for the program
 
 ### Tests
 
 - run the tests via: 'python -m unittest discover'
+
 ### Coverage
 
 - poetry run pytest --cov=hypermesh_lattice_mesher --cov-report=term-missing

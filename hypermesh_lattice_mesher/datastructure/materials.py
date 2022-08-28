@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Dict
+from typing import Dict, List, Tuple
 
 
 class Material:
@@ -27,11 +27,44 @@ class Material:
         Material.materials[self.id_] = self
 
     @classmethod
+    def create_materials(
+        cls,
+        number_of_materials: int,
+        lower_upper_yng: Tuple,
+        nu: float,
+        density: float,
+    ) -> List[Material]:
+        """
+        Creates multiple material instancces with different yngs modules
+        Parameters:
+        ----------
+        number_of_materials: int
+          number of materials to be created
+        lower_upper_yng: float
+          lowest value and highest for yngs module
+        nu: float
+          poisson's ration for all materials
+        density: float
+          density for all materials
+
+        """
+        (lower_yng, upper_yng) = lower_upper_yng
+        materials = [None] * number_of_materials
+        delta = (abs(upper_yng) - abs(lower_yng)) / (float(number_of_materials) - 1)
+        for i in range(number_of_materials):
+            material = Material(f"mat_{i}")
+            yngs = lower_yng + i * delta
+            material.add_linear_material_properties(yngs, nu, density)
+            materials[i] = material
+        return materials
+
+    @classmethod
     def reset(cls):
         """
         Resets all elements to empty list
         """
         Material.materials.clear()
+        Material.counter = 1
 
     def add_linear_material_properties(
         self, yngs_module: float, nu: float, density: float
