@@ -1,4 +1,4 @@
-from typing import List
+from typing import Dict, List
 from hypermesh_lattice_mesher.datastructure.nodes import Node
 from hypermesh_lattice_mesher.datastructure.elements import Element, ConnectionType
 from hypermesh_lattice_mesher.datastructure.materials import Material
@@ -187,3 +187,34 @@ class ScriptBuilder:
         self.tcl_commands.append(f"*writefile {path_to_model_file} 1")
         self.tcl_commands.append("*quit 1")  # for non batch
         self.tcl_commands.append("exit")  # batch
+
+    def write_tcl_import_fem_file(self, path_to_fem_file):
+        """
+        Imports a given .fem file
+        """
+        path_to_fem_file = path_to_fem_file.replace("\\", "/")
+        self.tcl_commands.append(
+            '*createstringarray 13 "OptiStruct " " " "ASSIGNPROP_BYHMCOMMENTS " '
+            '"CREATE_PART_HIERARCHY" \\'
+        )
+        self.tcl_commands.append(
+            '"IMPORT_MATERIAL_METADATA" "ANSA " "PATRAN " "EXPAND_IDS_FOR_FORMULA_SETS " \\'
+        )
+        self.tcl_commands.append(
+            '"CONTACTSURF_DISPLAY_SKIP " "LOADCOLS_DISPLAY_SKIP " "SYSTCOLS_DISPLAY_SKIP " \\'
+        )
+        self.tcl_commands.append('"VECTORCOLS_DISPLAY_SKIP " "\\[DRIVE_MAPPING= \\]"')
+        self.tcl_commands.append(
+            f'*feinputwithdata2 "\\#optistruct\\\\optistruct" "{path_to_fem_file}"'
+            " 0 0 0 0 0 1 13 1 0"
+        )
+
+    def write_tcl_update_rod_properties(self, porperty_to_elem_ids: Dict):
+        """
+        Updates properties according to input dictionary - used for updating according
+        to stress values for optimization
+        """
+        for property_name, elem_ids in porperty_to_elem_ids.items():
+            ids = " ".join(elem_ids)
+            self.tcl_commands.append(f"*createmark elems 1 {ids}")
+            self.tcl_commands.append(f'*rodupdate 1 "{property_name}"')

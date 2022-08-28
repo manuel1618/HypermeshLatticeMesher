@@ -2,6 +2,7 @@
 Main method of the CLI which is done as a CLI with Typer.
 """
 import os
+from typing import Dict, List
 import typer
 from hypermesh_lattice_mesher.datastructure.materials import Material
 
@@ -197,19 +198,26 @@ def readDisplacement(file_path: str):
 
 
 @app.command()
-def create_materials():
+def update_material_values(path_3dfem_file: str, path_criteria: str):
     """
     Create multiple materials and assign elmeents to them according to the
     stress values given in the list
-    TODO - import, delete, sort
     """
-    # if file_path == "":
-    #     path_fem_file = (
-    #         os.getcwd().replace("\\", "/")
-    #         + "/hypermesh_lattice_mesher/data/import/femFiles/smallModel.fem"
-    #     )
-    # else:
-    #     path_fem_file = file_path.replace("\\", "/")
+    if path_3dfem_file == "":
+        path_3dfem_file = (
+            os.getcwd().replace("\\", "/")
+            + "/hypermesh_lattice_mesher/data/import/femFiles/smallModelLattice.fem"
+        )
+    else:
+        path_3dfem_file = path_3dfem_file.replace("\\", "/")
+
+    if path_criteria == "":
+        path_criteria = (
+            os.getcwd().replace("\\", "/")
+            + "/hypermesh_lattice_mesher/data/import/values/smallModelStress.txt"
+        )
+    else:
+        path_criteria = path_criteria.replace("\\", "/")
 
     path_tcl_dir = (
         os.getcwd().replace("\\", "/")
@@ -223,9 +231,16 @@ def create_materials():
 
     scriptbuilder = ScriptBuilder()
     # Material
-    materials = Material.create_materials(10, (20000, 120000), 0.3, 7.85e-9)
-
+    yngs_modules = (20000, 120000)
+    number_materials = 10
+    materials = Material.create_materials(number_materials, yngs_modules, 0.3, 7.85e-9)
     scriptbuilder.write_tcl_create_materials_properties(materials, 0.5)
+    scriptbuilder.write_tcl_import_fem_file(path_3dfem_file)
+
+    # Assign element Ids to materials
+    elem_id_to_property_name = fetch_elem_id_to_prop_name(path_criteria, materials)
+
+    scriptbuilder.write_tcl_update_rod_properties(elem_id_to_property_name)
     scriptbuilder.write_tcl_save_model_and_close(path_hypermesh_dir + "model_test.hm")
 
     hyperworks_starter = HyperworksStarter(path_tcl_dir, "model1")
@@ -235,6 +250,49 @@ def create_materials():
 
     # Run Hypermesh in batch to save time
     hyperworks_starter.runHyperMesh(True, False)
+
+
+def fetch_elem_id_to_prop_name(path_criteria: str, materials: List[Material]) -> Dict:
+    """
+    Map the stress values from the file to material ids
+    """
+    elem_id_to_value = {}
+    min_value = 0
+    max_value = 0
+    with open(path_criteria, "r", encoding="utf-8") as criteria_file:
+        for line in criteria_file.readlines():
+            if line.strip() == "":
+                continue
+            if not line.strip()[0].isnumeric():
+                continue
+            id_ = line.split(",")[0]
+            value = float(line.split(",")[1])
+            print(value)
+            if abs(value) < min_value:
+                min_value = abs(value)
+            if abs(value) > max_value:
+                max_value = abs(value)
+            print(f"id: {id_}")
+            print(f"val: {value}")
+            elem_id_to_value[id_] = value
+
+    property_to_elem_ids = {}
+    step: int = (max_value - min_value) / float(len(materials))
+
+    for id_, value in elem_id_to_value.items():
+        id_material: int = round((float(abs(value)) - min_value) / step)
+        if id_material == len(materials):
+            id_material = len(materials) - 1
+        property_name = f"property_{materials[id_material].id_}"
+
+        if property_name in property_to_elem_ids:
+            temp = property_to_elem_ids[property_name]
+            temp.append(id_)
+            property_to_elem_ids[property_name] = temp
+        else:
+            property_to_elem_ids[property_name] = [id_]
+
+    return property_to_elem_ids
 
 
 @app.callback()
