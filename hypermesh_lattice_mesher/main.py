@@ -2,7 +2,7 @@
 Main method of the CLI which is done as a CLI with Typer.
 """
 import os
-from typing import Dict, List
+from typing import Dict, List, Tuple
 import typer
 from hypermesh_lattice_mesher.datastructure.materials import Material
 
@@ -198,10 +198,24 @@ def readDisplacement(file_path: str):
 
 
 @app.command()
-def update_material_values(path_3dfem_file: str, path_criteria: str):
+def update_material_values(
+    path_3dfem_file: str,
+    path_criteria: str,
+    number_materials: int,
+    lower_yng: float,
+    upper_yng: float,
+):
     """
     Create multiple materials and assign elmeents to them according to the
     stress values given in the list
+
+    Parameters
+    ---------
+
+    material_info : Tuple
+      (number_of_material, (min_yng_mod, max_yng_mod)) - info containing the number
+        of materials to be created as well as lower and upper constraints for the
+        youngs module
     """
     if path_3dfem_file == "":
         path_3dfem_file = (
@@ -219,6 +233,13 @@ def update_material_values(path_3dfem_file: str, path_criteria: str):
     else:
         path_criteria = path_criteria.replace("\\", "/")
 
+    if number_materials == 0:
+        number_materials = 10
+    if lower_yng == 0:
+        lower_yng = 20000
+    if upper_yng == 0:
+        upper_yng = 120000
+
     path_tcl_dir = (
         os.getcwd().replace("\\", "/")
         + "/hypermesh_lattice_mesher/data/export/scripts/"
@@ -231,16 +252,15 @@ def update_material_values(path_3dfem_file: str, path_criteria: str):
 
     scriptbuilder = ScriptBuilder()
     # Material
-    yngs_modules = (20000, 120000)
-    number_materials = 10
-    materials = Material.create_materials(number_materials, yngs_modules, 0.3, 7.85e-9)
+    materials = Material.create_materials(
+        number_materials, (lower_yng, upper_yng), 0.3, 7.85e-9
+    )
     scriptbuilder.write_tcl_create_materials_properties(materials, 0.5)
     scriptbuilder.write_tcl_import_fem_file(path_3dfem_file)
 
     # Assign element Ids to materials
-    elem_id_to_property_name = fetch_elem_id_to_prop_name(path_criteria, materials)
-
-    scriptbuilder.write_tcl_update_rod_properties(elem_id_to_property_name)
+    property_name_to_element_ids = fetch_elem_id_to_prop_name(path_criteria, materials)
+    scriptbuilder.write_tcl_update_rod_properties(property_name_to_element_ids)
     scriptbuilder.write_tcl_save_model_and_close(path_hypermesh_dir + "model_test.hm")
 
     hyperworks_starter = HyperworksStarter(path_tcl_dir, "model1")
@@ -267,13 +287,10 @@ def fetch_elem_id_to_prop_name(path_criteria: str, materials: List[Material]) ->
                 continue
             id_ = line.split(",")[0]
             value = float(line.split(",")[1])
-            print(value)
             if abs(value) < min_value:
                 min_value = abs(value)
             if abs(value) > max_value:
                 max_value = abs(value)
-            print(f"id: {id_}")
-            print(f"val: {value}")
             elem_id_to_value[id_] = value
 
     property_to_elem_ids = {}

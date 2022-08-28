@@ -50,11 +50,10 @@ class Material:
         """
         (lower_yng, upper_yng) = lower_upper_yng
         materials = [None] * number_of_materials
-        delta = (upper_yng - lower_yng) / (float(number_of_materials) - 1)
+        delta = (abs(upper_yng) - abs(lower_yng)) / (float(number_of_materials) - 1)
         for i in range(number_of_materials):
             material = Material(f"mat_{i}")
             yngs = lower_yng + i * delta
-            print(yngs)
             material.add_linear_material_properties(yngs, nu, density)
             materials[i] = material
         return materials
