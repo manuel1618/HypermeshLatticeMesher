@@ -17,13 +17,20 @@ Some notes for better understanding the code in here (mostly for myself)
 
 ### Execute
 
-- run the module via: python -m hypermesh_lattice_mesher.main
-- This is the top module which should contain the main logic for the program
+- run the module in a poetry shell via: python -m hypermesh_lattice_mesher.main
+- Commands:
+  - mesh                    Meshes the .fem file by using tcl commands in...
+  - meshfemfile             Meshtes the .fem file directly, no tcl commands...
+  - readdisplacement        Reads the total displacement values from an...
+  - readstress              Reads the axial sterss values from an .h3d file...
+  - update-material-values  Create multiple materials and assign elmeents...
 
 ### Tests
 
-- run the tests via: 'python -m unittest discover'
-
-### Coverage
-
-- poetry run pytest --cov=hypermesh_lattice_mesher --cov-report=term-missing
+- Done in the task file
+- task: Available tasks for this project:
+  - build:        Builds the puthon package
+  - format:       Formats the source code
+  - lint:         Lints the code and reports on issues.
+  - setup:        Install dependencies and dev-dependencies
+  - test:         Runs the test suite.
