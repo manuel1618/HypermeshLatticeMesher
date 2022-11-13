@@ -19,17 +19,23 @@ Some notes for better understanding the code in here (mostly for myself)
 
 - run the module in a poetry shell via: python -m hypermesh_lattice_mesher.main
 - Commands:
-  - mesh                    Meshes the .fem file by using tcl commands in...
-  - meshfemfile             Meshtes the .fem file directly, no tcl commands...
-  - readdisplacement        Reads the total displacement values from an...
-  - readstress              Reads the axial sterss values from an .h3d file...
-  - update-material-values  Create multiple materials and assign elmeents...
+  - mesh
+    - Meshes the .fem file by using tcl commands in hypermesh. Sort of deprecated. It stays because may be necessary for later use for more complicated use cases
+  - meshfemfile
+    - Meshtes the .fem file directly, no tcl commands for hypermesh are generated
+  - readdisplacement
+    - Reads the total displacement values from an .h3d file and saves a file of those values
+  - readstress
+    - Reads the axial stress values from an .h3d file and saves a file of those values
+  - update-material-values
+    - Create multiple materials and assign elmeents to them according to the
+    stress values given in the list
 
 ### Tests
 
 - Done in the task file
 - task: Available tasks for this project:
-  - build:        Builds the puthon package
+  - build:        Builds the python package
   - format:       Formats the source code
   - lint:         Lints the code and reports on issues.
   - setup:        Install dependencies and dev-dependencies

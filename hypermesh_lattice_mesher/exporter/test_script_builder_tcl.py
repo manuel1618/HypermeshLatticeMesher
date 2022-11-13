@@ -1,3 +1,4 @@
+import os
 import unittest
 from hypermesh_lattice_mesher.datastructure.elements import Element, ElementConfig
 from hypermesh_lattice_mesher.exporter.hyperworks_starter import HyperworksStarter
@@ -47,7 +48,7 @@ class TestSciptBuilderTCL(unittest.TestCase):
         )
 
     def test_write_and_save(self):
-        my_path = "my_path"
+        my_path = os.getcwd().replace("\\", "/") + "/my_path"
         scriptBuilder = ScriptBuilder()
         scriptBuilder.write_tcl_save_model_and_close(my_path)
         tcl_commands = scriptBuilder.tcl_commands

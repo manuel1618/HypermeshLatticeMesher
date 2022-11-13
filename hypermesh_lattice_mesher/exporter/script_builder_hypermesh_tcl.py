@@ -1,3 +1,4 @@
+import os
 from typing import Dict, List
 from hypermesh_lattice_mesher.datastructure.nodes import Node
 from hypermesh_lattice_mesher.datastructure.elements import Element, ConnectionType
@@ -182,7 +183,7 @@ class ScriptBuilder:
         """
         Saves the model to a .hm file
         """
-        path_to_model_file = path_to_model_file.replace("\\", "/")
+        path_to_model_file = os.path.abspath(path_to_model_file).replace("\\", "/")
         self.tcl_commands.append("hm_answernext yes")
         self.tcl_commands.append(f"*writefile {path_to_model_file} 1")
         self.tcl_commands.append("*quit 1")  # for non batch
@@ -192,7 +193,7 @@ class ScriptBuilder:
         """
         Imports a given .fem file
         """
-        path_to_fem_file = path_to_fem_file.replace("\\", "/")
+        path_to_fem_file = os.path.abspath(path_to_fem_file).replace("\\", "/")
         self.tcl_commands.append(
             '*createstringarray 13 "OptiStruct " " " "ASSIGNPROP_BYHMCOMMENTS " '
             '"CREATE_PART_HIERARCHY" \\'

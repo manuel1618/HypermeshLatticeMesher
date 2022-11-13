@@ -16,11 +16,15 @@ from hypermesh_lattice_mesher.exporter.script_builder_hyperview import (
     ScriptBuilderHyperview,
 )
 
-app = typer.Typer()
+app = typer.Typer(no_args_is_help=True)
 
 
 @app.command()
-def mesh(file_path: str):
+def mesh(
+    file_path: str = typer.Argument(
+        ..., help="The file location of the .fem File with 3D Elements in it"
+    ),
+):
     """
     Meshes the .fem file by using tcl commands in hypermesh. Sort of deprecated.
     It stays because may be necessary for later use for more complicated use cases
@@ -72,7 +76,11 @@ def mesh(file_path: str):
 
 
 @app.command()
-def meshFEMFile(file_path: str):
+def meshFEMFile(
+    file_path: str = typer.Argument(
+        ..., help="The file location of the .fem File with 3D Elements in it"
+    ),
+):
     """
     Meshtes the .fem file directly, no tcl commands for hypermesh are generated
 
@@ -101,14 +109,16 @@ def meshFEMFile(file_path: str):
 
 
 @app.command()
-def readStress(file_path: str):
+def readStress(
+    file_path: str = typer.Argument(..., help="Path to the h3d file to be read"),
+):
     """
-    Reads the axial sterss values from an .h3d file and saves a file of those values
+    Reads the axial stress values from an .h3d file and saves a file of those values
 
     Parameters
     ----------
     file_path : str
-       path to the h3d file to be read
+       Path to the h3d file to be read
 
     Returns
     -------
@@ -149,7 +159,9 @@ def readStress(file_path: str):
 
 
 @app.command()
-def readDisplacement(file_path: str):
+def readDisplacement(
+    file_path: str = typer.Argument(..., help="path to the h3d file to be read"),
+):
     """
     Reads the total displacement values from an .h3d file and saves a file of those
     values
@@ -199,11 +211,21 @@ def readDisplacement(file_path: str):
 
 @app.command()
 def update_material_values(
-    path_3dfem_file: str,
-    path_criteria: str,
-    number_materials: int,
-    lower_yng: float,
-    upper_yng: float,
+    path_3dfem_file: str = typer.Argument(
+        ...,
+        help="Path to the file containing the 3d model where to update the materias",
+    ),
+    path_criteria: str = typer.Argument(
+        ...,
+        help="Path to the critera file contining element values (e.g. form the read displacement\
+         command)",
+    ),
+    number_materials: int = typer.Argument(
+        10,
+        help="Number of materials to create for the range of yng modules (linear separated)",
+    ),
+    lower_yng: float = typer.Argument(0, help="lower Young's Module boundary"),
+    upper_yng: float = typer.Argument(210000, help="upper Young's Module boundary"),
 ):
     """
     Create multiple materials and assign elmeents to them according to the
@@ -211,11 +233,17 @@ def update_material_values(
 
     Parameters
     ---------
+    path_3dfem_fise: str
+      Path to the file containing the 3d model where to update the materias
+    path_criteria : str
+      Path to the critera file contining element values (e.g. form the read displacement command)
+    munber_materials : int
+      Number of materials to create for the range of yng modules (linear separated)
+    lower_yng : float
+      lower Young's Module boundary
+    upper_yng : float
+      upper Young's Module boundary
 
-    material_info : Tuple
-      (number_of_material, (min_yng_mod, max_yng_mod)) - info containing the number
-        of materials to be created as well as lower and upper constraints for the
-        youngs module
     """
     if path_3dfem_file == "":
         path_3dfem_file = (

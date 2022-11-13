@@ -15,7 +15,7 @@ class HyperworksStarter:
     """
 
     # Change this according to your system
-    ALTAIR_VERSION = "2022"  # user input
+    ALTAIR_VERSION = "2022.1"  # user input
 
     # File paths
     OPTISTRUCT_PROCESS_NAME = f"optistruct_{ALTAIR_VERSION}_win64.exe"
