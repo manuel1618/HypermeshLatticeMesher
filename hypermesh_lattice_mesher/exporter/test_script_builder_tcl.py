@@ -47,7 +47,7 @@ class TestSciptBuilderTCL(unittest.TestCase):
         )
 
     def test_write_and_save(self):
-        my_path = "my_path"
+        my_path = "D:/GITHUB/HypermeshLatticeMesher/my_path"
         scriptBuilder = ScriptBuilder()
         scriptBuilder.write_tcl_save_model_and_close(my_path)
         tcl_commands = scriptBuilder.tcl_commands

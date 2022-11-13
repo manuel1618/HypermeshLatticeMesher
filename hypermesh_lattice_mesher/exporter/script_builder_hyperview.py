@@ -1,6 +1,7 @@
 """
 Hyperview Script Module
 """
+import os
 
 
 class ScriptBuilderHyperview:
@@ -18,7 +19,9 @@ class ScriptBuilderHyperview:
 
     def __init__(self, path_to_working_dir: str):
         self.reset_commands()
-        self.path_to_working_dir = path_to_working_dir.replace("\\", "/")
+        self.path_to_working_dir = os.path.abspath(path_to_working_dir).replace(
+            "\\", "/"
+        )
 
     def reset_commands(self):
         """
@@ -32,7 +35,7 @@ class ScriptBuilderHyperview:
              and their stress values
         """
         self.reset_commands()
-        path_to_h3d_file = path_to_h3d_file.replace("\\", "/")
+        path_to_h3d_file = os.path.abspath(path_to_h3d_file).replace("\\", "/")
 
         self.tcl_commands.append(f"cd {  self.path_to_working_dir}")
         self.tcl_commands.append(f'set outPath "{self.path_to_working_dir}/output.txt"')
@@ -73,7 +76,7 @@ class ScriptBuilderHyperview:
         Creats the Displacement field from the model
         """
         self.reset_commands()
-        path_to_h3d_file = path_to_h3d_file.replace("\\", "/")
+        path_to_h3d_file = os.path.abspath(path_to_h3d_file).replace("\\", "/")
         self.tcl_commands = []
         self.tcl_commands.append(f"cd {  self.path_to_working_dir}")
         self.tcl_commands.append(f'set outPath "{self.path_to_working_dir}/output.txt"')
