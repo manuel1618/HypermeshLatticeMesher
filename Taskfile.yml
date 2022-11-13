@@ -1,7 +1,7 @@
 version: "3"
 
 tasks:
-  setup:
+  install:
     desc: Install dependencies and dev-dependencies
     cmds:
       - python -m pip install --user poetry
@@ -35,3 +35,33 @@ tasks:
         --cov-report term:skip-covered \
         --cov=hypermesh_lattice_mesher \
         --cov-report=term-missing
+
+  help:
+    desc: runs the cli and shows help for the commands
+    cmds: 
+      - poetry run python -m hypermesh_lattice_mesher.main --help
+
+  mesh:
+    desc: Mesh a 3d file with rod elements with tcl commands. Slow when large
+    cmds: 
+      - poetry run python -m hypermesh_lattice_mesher.main mesh {{.CLI_ARGS}}
+
+  meshfemfile:
+    desc: Mesh a 3d file with rod elements directly as fem file, no tcl, more speed
+    cmds: 
+      - poetry run python -m hypermesh_lattice_mesher.main meshfemfile {{.CLI_ARGS}}
+
+  readdisplacement:
+    desc: Reads the total displacement values from an .h3d file and saves a file of those values
+    cmds: 
+      - poetry run python -m hypermesh_lattice_mesher.main readdisplacement {{.CLI_ARGS}}
+  
+  readstress:
+    desc: Reads the axial stress values from an .h3d file and saves a file of those values
+    cmds: 
+      - poetry run python -m hypermesh_lattice_mesher.main readstress {{.CLI_ARGS}}
+
+  update-material-values:
+    desc: Reads the axial stress values from an .h3d file and saves a file of those values
+    cmds: 
+      - poetry run python -m hypermesh_lattice_mesher.main update-material-values {{.CLI_ARGS}}
